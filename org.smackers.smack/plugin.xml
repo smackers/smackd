@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="SMACK"
+            id="org.smackers.smack.commands.smackCategory">
+      </category>
+      <command
+            name="Run SMACK"
+            categoryId="org.smackers.smack.commands.smackCategory"
+            id="org.smackers.smack.commands.runSmackCommand">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="org.smackers.smack.commands.runSmackCommand"
+            class="org.smackers.smack.handlers.RunSmackHandler">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="org.smackers.smack.commands.runSmackCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            sequence="M1+6"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               id="org.smackers.smack.menus.smackMenu"
+               label="SMACK Menu"
+               mnemonic="M">
+            <command
+                  commandId="org.smackers.smack.commands.runSmackCommand"
+                  id="org.smackers.smack.menus.runSmackCommand"
+                  mnemonic="S">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="org.smackers.smack.toolbars.smackToolbar">
+            <command
+                  commandId="org.smackers.smack.commands.runSmackCommand"
+                  icon="icons/sample.gif"
+                  tooltip="Run SMACK"
+                  id="org.smackers.smack.toolbars.runSmackCommand">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="org.smackers.smack.views.SmackMarkView"
+            icon="icons/sample.gif"
+            id="org.smackers.smack.views.SmackMarkView"
+            name="SMACK View">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.cdt.ui.CPerspective">
+         <view
+               id="org.smackers.smack.views.SmackMarkView"
+               ratio="0.5"
+               relationship="stack"
+               relative="org.eclipse.ui.views.ProblemView">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.smackers.smack.preferences.SmackPreferences"
+            id="org.smackers.smack.preferences.SmackPreferences"
+            name="Smack Preferences">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.smackers.smack.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>      
+   <extension
+         point="org.eclipse.ui.ide.markerSupport">
+      <markerField
+            class="org.smackers.smack.markers.CallOrderField"
+            id="org.smackers.smack.markers.callOrderField"
+            name="Call Order"/>
+      <markerContentGenerator
+            id="org.smackers.smack.markers.SmackMarkerGenerator"
+            name="SMACK Marker Generator">
+         <markerTypeReference 
+		       id="org.smackers.smack.markers.smackAssertionFailedMarker"/>
+         <markerTypeReference 
+               id="org.smackers.smack.markers.smackAssertionTraceMarker"/>		       
+         <markerFieldReference
+               id="org.smackers.smack.markers.callOrderField"/>
+         <markerFieldReference
+               id="org.eclipse.ui.ide.severityAndDescriptionField"/>
+         <markerFieldReference
+               id="org.eclipse.ui.ide.resourceField"/>
+         <markerFieldReference
+               id="org.eclipse.ui.ide.pathField"/>
+         <markerFieldReference
+               id="org.eclipse.ui.ide.locationField"/>
+         <markerFieldReference
+               id="org.eclipse.ui.ide.markerType"/>
+      </markerContentGenerator>
+   </extension>   
+<!-- Begin Assertion Failed Marker Extension -->
+   <extension
+         id="org.smackers.smack.markers.smackAssertionFailedMarker"
+         name="SMACK Assertion Failed Marker"
+         point="org.eclipse.core.resources.markers">
+      <super type="org.eclipse.core.resources.textmarker"/>
+      <!--<super type="org.eclipse.core.resources.problemmarker"/>-->
+      <attribute name="callOrder"/>
+      <persistent value="true"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.annotationTypes">
+      <type
+            markerType="org.smackers.smack.markers.smackAssertionFailedMarker"
+            name="org.smackers.smack.markers.smackAssertionFailedMarker">
+      </type>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.editors.markerAnnotationSpecification">
+      <specification
+            annotationType="org.smackers.smack.markers.smackAssertionFailedMarker"
+            colorPreferenceKey="org.smackers.smack.markers.smackAssertionFailedMarker.color"
+            colorPreferenceValue="250,150,140"
+            contributesToHeader="false"
+            highlightPreferenceKey="org.smackers.smack.markers.smackAssertionFailedMarker.highlight"
+            highlightPreferenceValue="true"
+            includeOnPreferencePage="true"
+            label="SMACK Assertion Failed Marker"
+            overviewRulerPreferenceKey="org.smackers.smack.markers.smackAssertionFailedMarker.overview"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="0"
+            textPreferenceKey="org.smackers.smack.markers.smackAssertionFailedMarker.text"
+            textPreferenceValue="true"
+            textStylePreferenceValue="BOX"
+            verticalRulerPreferenceKey="org.smackers.smack.markers.smackAssertionFailedMarker.ruler"
+            verticalRulerPreferenceValue="true">
+      </specification>
+   </extension>
+<!-- Begin Assertion Trace Marker Extension -->
+   <extension
+         id="org.smackers.smack.markers.smackAssertionTraceMarker"
+         name="SMACK Assertion Trace Marker"
+         point="org.eclipse.core.resources.markers">
+      <super type="org.eclipse.core.resources.textmarker"/>
+      <!--<super type="org.eclipse.core.resources.problemmarker"/>-->
+      <attribute name="callOrder"/>
+      <persistent value="true"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.annotationTypes">
+      <type
+            markerType="org.smackers.smack.markers.smackAssertionTraceMarker"
+            name="org.smackers.smack.markers.smackAssertionTraceMarker">
+      </type>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.editors.markerAnnotationSpecification">
+      <specification
+            annotationType="org.smackers.smack.markers.smackAssertionTraceMarker"
+            colorPreferenceKey="org.smackers.smack.markers.smackAssertionTraceMarker.color"
+            colorPreferenceValue="192,255,192"
+            contributesToHeader="false"
+            highlightPreferenceKey="org.smackers.smack.markers.smackAssertionTraceMarker.highlight"
+            highlightPreferenceValue="true"
+            includeOnPreferencePage="true"
+            label="SMACK Assertion Trace Marker"
+            overviewRulerPreferenceKey="org.smackers.smack.markers.smackAssertionTraceMarker.overview"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="0"
+            textPreferenceKey="org.smackers.smack.markers.smackAssertionTraceMarker.text"
+            textPreferenceValue="true"
+            textStylePreferenceValue="BOX"
+            verticalRulerPreferenceKey="org.smackers.smack.markers.smackAssertionTraceMarker.ruler"
+            verticalRulerPreferenceValue="true">
+      </specification>
+   </extension>
+</plugin>
