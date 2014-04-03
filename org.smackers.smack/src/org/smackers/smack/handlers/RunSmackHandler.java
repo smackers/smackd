@@ -9,11 +9,11 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
+//import org.eclipse.core.runtime.CoreException;
+//import org.eclipse.core.runtime.IProgressMonitor;
+//import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
+//import org.eclipse.core.runtime.jobs.Job;
 
 import org.smackers.smack.util.TraceParser;
 

@@ -51,10 +51,11 @@
                id="org.smackers.smack.toolbars.smackToolbar">
             <command
                   commandId="org.smackers.smack.commands.runSmackCommand"
-                  icon="icons/sample.gif"
+
                   tooltip="Run SMACK"
                   id="org.smackers.smack.toolbars.runSmackCommand">
             </command>
+                  <!-- icon="icons/sample.gif" Goes in "command" node of this toolbar node-->
          </toolbar>
       </menuContribution>
    </extension>
@@ -63,10 +64,10 @@
          point="org.eclipse.ui.views">
       <view
             class="org.smackers.smack.views.SmackMarkView"
-            icon="icons/sample.gif"
             id="org.smackers.smack.views.SmackMarkView"
             name="SMACK View">
       </view>
+                  <!-- icon="icons/sample.gif" Goes in "view" node of this extension node-->      
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
