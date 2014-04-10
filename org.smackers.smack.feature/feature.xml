@@ -2,7 +2,7 @@
 <feature
       id="org.smackers.smack.feature"
       label="Smack Analyzer"
-      version="1.0.0.qualifier">
+      version="1.0.0.0">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -24,6 +24,6 @@
          id="org.smackers.smack"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="1.0.0.0"/>
 
 </feature>
