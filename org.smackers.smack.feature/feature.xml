@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.smackers.smack.feature"
-      label="Smack Analyzer"
-      version="1.0.0.1">
+      label="SMACK&apos;D"
+      version="1.0.0.2">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -17,7 +17,7 @@
    </license>
 
    <url>
-      <update label="234e" url="http://test.org/"/>
+      <update label="SMACK&apos;D" url="http://snoopsmsc.github.io/smackd"/>
    </url>
 
    <plugin

@@ -51,6 +51,14 @@ public class SmackPreferences
 		addField(new DirectoryFieldEditor(	PreferenceConstants.CORRAL_BIN,
 											"Corral bin Path:",
 											getFieldEditorParent()));
+		
+		addField(new BooleanFieldEditor(	PreferenceConstants.DEBUG_MODE,
+											"Debug mode:",
+											getFieldEditorParent()));
+		
+		addField(new FileFieldEditor(		PreferenceConstants.LOG_FILE,
+											"Log File:",
+											getFieldEditorParent()));
 	}
 
 	/* (non-Javadoc)

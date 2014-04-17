@@ -3,6 +3,8 @@ package org.smackers.smack;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import org.smackers.smack.util.Logger;
+
 /**
  * The activator class controls the plug-in life cycle
  */
@@ -14,10 +16,14 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 	
+	// The logger
+	private Logger logger;
+	
 	/**
 	 * The constructor
 	 */
 	public Activator() {
+		logger = new Logger();
 	}
 
 	/*
@@ -46,5 +52,11 @@ public class Activator extends AbstractUIPlugin {
 	public static Activator getDefault() {
 		return plugin;
 	}
+	
+	public Logger getLogger() {
+		return logger;
+	}
+	
+	
 
 }

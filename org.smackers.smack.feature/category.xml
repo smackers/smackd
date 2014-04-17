@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.smackers.smack.feature_1.0.0.1.jar" id="org.smackers.smack.feature" version="1.0.0.1">
-      <category name="smackd"/>
-   </feature>
+   <feature url="features/org.smackers.smack.feature_1.0.0.2.jar" id="org.smackers.smack.feature" version="1.0.0.2"/>
+   <bundle id="org.smackers.smack" version="1.0.0.2"/>
    <category-def name="smackd" label="SMACK&apos;D"/>
 </site>

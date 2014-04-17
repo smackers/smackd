@@ -69,11 +69,13 @@ public class TraceParser {
 	public static String execSmack(String filename) {
 		String result = "";
 		//Grab the smack preference store, grab paths
-		final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();		
+		final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		Logger log = Activator.getDefault().getLogger();
 		String smackbin  = preferenceStore.getString(PreferenceConstants.SMACK_BIN);
 		String llvmbin   = preferenceStore.getString(PreferenceConstants.LLVM_BIN);
 		String boogiebin = preferenceStore.getString(PreferenceConstants.BOOGIE_BIN);
 		String corralbin = preferenceStore.getString(PreferenceConstants.CORRAL_BIN);
+					
 		String cmd = "smack-verify.py";
 
 		try {
@@ -83,17 +85,25 @@ public class TraceParser {
 			//So we see error output on console
 			pb.redirectErrorStream(true);
 			Map<String,String> env = pb.environment();
+			log.write(Logger.SMACK_ENV, "CONFIGURING PATH:");
 			//Grab current system path, add what we need
 			String path = System.getenv("PATH");
 			path += ":" + llvmbin;
 			path += ":" + smackbin;
 			env.put("PATH", path);
+			
+			log.write(Logger.SMACK_ENV, "PATH: " + path);
 			//Add the command aliases expected by smack-verify.py
 			//TODO User path builder instead, to handle trailing '/' on paths (see java.io.File, new File(baseDirFile,subdirStr))
 			//TODO Can we assume mono in path?
-			env.put("BOOGIE", "mono " + boogiebin + "/Boogie.exe");
-			env.put("CORRAL", "mono " + corralbin + "/Debug/corral.exe");
+			String boogieVar = "mono " + boogiebin + "/Boogie.exe";
+			env.put("BOOGIE", boogieVar);
+			log.write(Logger.SMACK_ENV, "BOOGIE: " + boogieVar);
+			String corralVar = "mono " + corralbin + "/Debug/corral.exe";
+			env.put("CORRAL", corralVar);
+			log.write(Logger.SMACK_ENV, "CORRAL: " + corralVar);
 			// Start process
+			log.write(Logger.SMACK_EXEC, "Executing SMACK");
 			Process p = pb.start();
 			// Waaaait for it!
 			p.waitFor();
@@ -113,6 +123,7 @@ public class TraceParser {
 			    System.out.println(line);
 			}
 			//ParseSmackOutput(result);
+			log.write(Logger.SMACK_OUTPUT, result);
 			return result;
 		}
 		catch (Exception e) {
