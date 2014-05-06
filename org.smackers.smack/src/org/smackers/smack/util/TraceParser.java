@@ -75,6 +75,7 @@ public class TraceParser {
 		String llvmbin   = preferenceStore.getString(PreferenceConstants.LLVM_BIN);
 		String boogiebin = preferenceStore.getString(PreferenceConstants.BOOGIE_BIN);
 		String corralbin = preferenceStore.getString(PreferenceConstants.CORRAL_BIN);
+		String monobin = preferenceStore.getString(PreferenceConstants.MONO_BIN);
 					
 		String cmd = "smack-verify.py";
 
@@ -96,10 +97,10 @@ public class TraceParser {
 			//Add the command aliases expected by smack-verify.py
 			//TODO User path builder instead, to handle trailing '/' on paths (see java.io.File, new File(baseDirFile,subdirStr))
 			//TODO Can we assume mono in path?
-			String boogieVar = "mono " + boogiebin + "/Boogie.exe";
+			String boogieVar = monobin + "/mono " + boogiebin + "/Boogie.exe";
 			env.put("BOOGIE", boogieVar);
 			log.write(Logger.SMACK_ENV, "BOOGIE: " + boogieVar);
-			String corralVar = "mono " + corralbin + "/Debug/corral.exe";
+			String corralVar = monobin + "/mono " + corralbin + "/Debug/corral.exe";
 			env.put("CORRAL", corralVar);
 			log.write(Logger.SMACK_ENV, "CORRAL: " + corralVar);
 			// Start process

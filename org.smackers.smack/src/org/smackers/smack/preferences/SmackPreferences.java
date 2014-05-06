@@ -52,6 +52,10 @@ public class SmackPreferences
 											"Corral bin Path:",
 											getFieldEditorParent()));
 		
+		addField(new DirectoryFieldEditor(	PreferenceConstants.MONO_BIN,
+											"Mono bin Path:",
+											getFieldEditorParent()));
+		
 		addField(new BooleanFieldEditor(	PreferenceConstants.DEBUG_MODE,
 											"Debug mode:",
 											getFieldEditorParent()));
