@@ -15,6 +15,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Status;
 //import org.eclipse.core.runtime.jobs.Job;
 
+import org.smackers.smack.util.Controller;
+import org.smackers.smack.util.ExecutionResult;
 import org.smackers.smack.util.TraceParser;
 
 
@@ -49,8 +51,9 @@ public class RunSmackHandler extends AbstractHandler {
 					if (input instanceof IFileEditorInput) {
 						IFileEditorInput fileInput = (IFileEditorInput) input;
 						IFile file = fileInput.getFile();
-						String output = TraceParser.execSmack(file.getRawLocation().toString());
-						TraceParser.parseSmackOutput(file,output);
+						String smackOutput = Controller.execSmack(file.getRawLocation().toString());
+						ExecutionResult smackExecutionResult = TraceParser.parseSmackOutput(file,smackOutput);
+						Controller.UpdateViews(smackExecutionResult);
 					} else {
 						MessageDialog.openInformation(
 								window.getShell(),
