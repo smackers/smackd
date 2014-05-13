@@ -10,6 +10,8 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
@@ -100,8 +102,18 @@ public class Controller {
 		}
 	}
 	
-	public static void UpdateViews(ExecutionResult result) {
+	public static void UpdateViews(IProject project, ExecutionResult result) {
 		if(!result.isVerificationPassed()) {
+			//Clear old markers
+			int depth = IResource.DEPTH_INFINITE;
+			try {
+				project.deleteMarkers("org.smackers.smack.markers.smackAssertionFailedMarker", true, depth);
+				project.deleteMarkers("org.smackers.smack.markers.smackAssertionTraceMarker", true, depth);
+			} catch (CoreException e) {
+				// something went wrong
+			}
+			
+			// And update with new markers
 			ArrayList<ExecutionTrace> traces = result.getTraces();
 			for(int x = 0; x < traces.size(); x++) {
 				ExecutionTrace trace = traces.get(x);

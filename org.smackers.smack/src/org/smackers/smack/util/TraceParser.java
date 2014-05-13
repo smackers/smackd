@@ -11,8 +11,16 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
+import org.eclipse.cdt.core.model.CoreModel;
+import org.eclipse.cdt.core.model.ICElement;
+import org.eclipse.cdt.core.model.ICProject;
+import org.eclipse.cdt.core.model.IPathEntry;
+import org.eclipse.cdt.core.model.ISourceRoot;
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
@@ -53,20 +61,7 @@ public class TraceParser {
 			String failsAtFileName = jsonFailsAt.getString("file");
 			IFile failsAtFile = null;
 			try {
-				failsAtFile = findFileRecursively(project, failsAtFileName);
-				//if(failsAtFile == null) {
-					//perhaps it is an include (non relative URL, not directly part of IProject)
-				//	IWorkspace workspace = ResourcesPlugin.getWorkspace();
-				//	IWorkspaceRoot workspaceRoot = workspace.getRoot();
-				//	try {
-				//		IPath newPath = new Path(failsAtFileName);
-				//		IFile[] failsAtFiles = workspaceRoot.
-				//		failsAtFile = failsAtFiles[0];
-				//	} catch (URISyntaxException e) {
-				//		// TODO Auto-generated catch block
-				//		e.printStackTrace();
-				//	} 
-				//}
+				failsAtFile = getIFile(project, failsAtFileName);
 			} catch (CoreException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -84,7 +79,7 @@ public class TraceParser {
 				String traceFileName = jsonTrace.getString("file");
 				IFile traceFile = null;
 				try {
-					traceFile = findFileRecursively(project, traceFileName);
+					traceFile = getIFile(project, traceFileName);
 				} catch (CoreException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -149,16 +144,15 @@ public class TraceParser {
 		return er;
 	}
 	
-	private static IFile findFileRecursively(IContainer project, String name) throws CoreException {
+	private static IFile findIFileInProjectRecursively(IContainer project, String name) throws CoreException {
 		IResource[] rs = project.members();
 	    for (IResource r : rs) {
 	        if (r instanceof IContainer) {
-	            IFile file = findFileRecursively((IContainer)r, name);
+	            IFile file = findIFileInProjectRecursively((IContainer)r, name);
 	            if(file != null) {
 	                return file;
 	            }
 	        } else if (r instanceof IFile) {
-	        	URI uri = r.getLocationURI();
 	        	IPath relPath = r.getFullPath();
 	        	String osRelPath = relPath.toOSString();
 	        	IPath fullPath = r.getRawLocation();
@@ -171,5 +165,21 @@ public class TraceParser {
 	    }
 
 	    return null;
+	}
+	
+	private static IFile getIFile(IProject project, String fileName) throws CoreException {
+		IFile ifile = null;
+		ifile = findIFileInProjectRecursively(project, fileName);
+		
+		if(ifile == null) {
+			//perhaps it is an include (non relative URL, not directly part of IProject)
+			IPath newPath = new Path(fileName);
+			IFolder folder = project.getFolder("Includes_" + newPath.removeLastSegments(1).toString().replace('/', '-') + "_(DeleteAfterVisualizing)");
+			//ifile = project.getFile(newPath.lastSegment() + "_(DeleteThisLinkAtterVisualizing)");
+			//ifile.createLink(newPath, IResource.NONE, null);
+			folder.createLink(newPath.removeLastSegments(1), IResource.NONE, null);
+			ifile = findIFileInProjectRecursively(project, fileName);
+		}
+		return ifile;
 	}
 }

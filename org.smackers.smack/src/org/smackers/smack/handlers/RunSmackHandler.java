@@ -37,7 +37,7 @@ public class RunSmackHandler extends AbstractHandler {
 	 * the command has been executed, so extract extract the needed information
 	 * from the application context.
 	 */
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(ExecutionEvent event) throws ExecutionException { 
 		final IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 		final IEditorInput input = HandlerUtil.getActiveEditorInput(event);
 		//Job addJob = new Job("Add Markers") {
@@ -55,7 +55,7 @@ public class RunSmackHandler extends AbstractHandler {
 						IProject project = file.getProject();
 						String smackOutput = Controller.execSmack(file.getRawLocation().toString());
 						ExecutionResult smackExecutionResult = TraceParser.parseSmackOutput(project,smackOutput);
-						Controller.UpdateViews(smackExecutionResult);
+						Controller.UpdateViews(project, smackExecutionResult);
 					} else {
 						MessageDialog.openInformation(
 								window.getShell(),
