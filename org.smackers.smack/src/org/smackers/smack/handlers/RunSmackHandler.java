@@ -49,7 +49,7 @@ public class RunSmackHandler extends AbstractHandler {
 			 */
 //			protected IStatus run(IProgressMonitor monitor) {
 
-					if (input instanceof IFileEditorInput) { 
+					if (input instanceof IFileEditorInput) {  
 						IFileEditorInput fileInput = (IFileEditorInput) input;
 						IFile file = fileInput.getFile();
 						IProject project = file.getProject();
