@@ -2,18 +2,31 @@ package org.smackers.smack.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+
 import javax.json.Json; 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 public class TraceParser {
 	
 	//Currently only supports a single source file, which must be passed in.
 	//TODO support multiple source files.  Do IFile resolution here, or in ExecutionTrace
-	public static ExecutionResult parseSmackOutput(IFile file, String output) {
+	public static ExecutionResult parseSmackOutput(IProject project, String output) {
 		
 		ExecutionResult er = new ExecutionResult();
 				
@@ -37,8 +50,30 @@ public class TraceParser {
 			er.setThreadCount(jo.getInt("threadCount"));
 			
 			JsonObject jsonFailsAt = jo.getJsonObject("failsAt");
-			ExecutionTrace failsAt = new ExecutionTrace(-1, jsonFailsAt.getString("file"),
-														file, jsonFailsAt.getInt("line"),
+			String failsAtFileName = jsonFailsAt.getString("file");
+			IFile failsAtFile = null;
+			try {
+				failsAtFile = findFileRecursively(project, failsAtFileName);
+				//if(failsAtFile == null) {
+					//perhaps it is an include (non relative URL, not directly part of IProject)
+				//	IWorkspace workspace = ResourcesPlugin.getWorkspace();
+				//	IWorkspaceRoot workspaceRoot = workspace.getRoot();
+				//	try {
+				//		IPath newPath = new Path(failsAtFileName);
+				//		IFile[] failsAtFiles = workspaceRoot.
+				//		failsAtFile = failsAtFiles[0];
+				//	} catch (URISyntaxException e) {
+				//		// TODO Auto-generated catch block
+				//		e.printStackTrace();
+				//	} 
+				//}
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			ExecutionTrace failsAt = new ExecutionTrace(-1, failsAtFileName,
+														failsAtFile,
+														jsonFailsAt.getInt("line"),
 														jsonFailsAt.getInt("column"),
 														jsonFailsAt.getString("description"));
 			er.setFailsAt(failsAt);
@@ -46,9 +81,18 @@ public class TraceParser {
 			JsonArray jsonTraces = jo.getJsonArray("traces");
 			for(int x = 0; x < jsonTraces.size(); x++) {
 				JsonObject jsonTrace = jsonTraces.getJsonObject(x);
+				String traceFileName = jsonTrace.getString("file");
+				IFile traceFile = null;
+				try {
+					traceFile = findFileRecursively(project, traceFileName);
+				} catch (CoreException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				ExecutionTrace trace = new ExecutionTrace(	jsonTrace.getInt("threadid"),
-															jsonTrace.getString("file"),
-															file, jsonTrace.getInt("line"),
+															traceFileName,
+															traceFile,
+															jsonTrace.getInt("line"),
 															jsonTrace.getInt("column"),
 															jsonTrace.getString("description"));
 				er.addTrace(trace);
@@ -103,5 +147,29 @@ public class TraceParser {
 //			}
 //		}
 		return er;
+	}
+	
+	private static IFile findFileRecursively(IContainer project, String name) throws CoreException {
+		IResource[] rs = project.members();
+	    for (IResource r : rs) {
+	        if (r instanceof IContainer) {
+	            IFile file = findFileRecursively((IContainer)r, name);
+	            if(file != null) {
+	                return file;
+	            }
+	        } else if (r instanceof IFile) {
+	        	URI uri = r.getLocationURI();
+	        	IPath relPath = r.getFullPath();
+	        	String osRelPath = relPath.toOSString();
+	        	IPath fullPath = r.getRawLocation();
+	        	String osFullPath = fullPath.toOSString();
+	        	if(osFullPath.equals(name) || osRelPath.equals(name)) {
+	        		return (IFile) r;	
+	        	}
+
+	        }
+	    }
+
+	    return null;
 	}
 }

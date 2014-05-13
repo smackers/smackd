@@ -9,6 +9,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 //import org.eclipse.core.runtime.CoreException;
 //import org.eclipse.core.runtime.IProgressMonitor;
 //import org.eclipse.core.runtime.IStatus;
@@ -51,8 +52,9 @@ public class RunSmackHandler extends AbstractHandler {
 					if (input instanceof IFileEditorInput) {
 						IFileEditorInput fileInput = (IFileEditorInput) input;
 						IFile file = fileInput.getFile();
+						IProject project = file.getProject();
 						String smackOutput = Controller.execSmack(file.getRawLocation().toString());
-						ExecutionResult smackExecutionResult = TraceParser.parseSmackOutput(file,smackOutput);
+						ExecutionResult smackExecutionResult = TraceParser.parseSmackOutput(project,smackOutput);
 						Controller.UpdateViews(smackExecutionResult);
 					} else {
 						MessageDialog.openInformation(
