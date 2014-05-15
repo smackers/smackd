@@ -78,6 +78,7 @@ $ git checkout gh-pages
 <p>From the Eclipse preferences window, select the <b>SMACK'D Preferences</b> tab.  Configure the paths specific to your machine</p>
 <p><b>NOTE: </b> Includes are currently an issue (which applies to ALL software analyzed by smack, as smack.h must be included).  The Eclipse CDT compiler is not currently aware of SMACK - an external instance of LLVM is used by SMACK.  As such, unless include paths for the CDT compiler and LLVM converge, only one will work at a time.  This is perhaps the next major hurdle for the project - figure out include paths, set some persistent environment variables during the SMACK install script, etc.</p>
 
+<h3>
 <a name="smackd-example" class="anchor" href="#smackd-example"><span class="octicon octicon-link"></span></a>SMACK'D Example</h3>
 
 <ul>
