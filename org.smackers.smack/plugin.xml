@@ -86,7 +86,19 @@
       <page
             class="org.smackers.smack.preferences.SmackPreferences"
             id="org.smackers.smack.preferences.SmackPreferences"
-            name="Smack Preferences">
+            name="Smack&apos;d">
+      </page>
+      <page
+            category="org.smackers.smack.preferences.SmackPreferences"
+            class="org.smackers.smack.preferences.DebugPreferences"
+            id="org.smackers.smack.preferences.DebugPreferences"
+            name="Debug">
+      </page>
+      <page
+            category="org.smackers.smack.preferences.SmackPreferences"
+            class="org.smackers.smack.preferences.RemotePreferences"
+            id="org.smackers.smack.preferences.RemotePreferences"
+            name="Remote">
       </page>
    </extension>
    <extension

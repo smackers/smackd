@@ -32,6 +32,12 @@ import org.smackers.smack.preferences.PreferenceConstants;
  *
  */
 public class Controller {
+	
+	//Sends file contents smack server, returns output as string
+	public static String remoteExecSmack(String fileContents) {
+		String result = "";
+		return result;
+	}
 
 	//Executes SMACK, returns stdout as a single string
 	public static String execSmack(String filename) {
