@@ -5,12 +5,15 @@ package org.smackers.smack.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -31,7 +34,6 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
@@ -47,9 +49,14 @@ import org.smackers.smack.preferences.PreferenceConstants;
  */
 public class Controller {
 	
+	//Get reference to logger
+	private static Logger log = Activator.getDefault().getLogger();		
+	
 	//Verifies the file using the locally installed instance of smack
 	public static void smackVerifyLocal(final IFile file) {
 		Job addJob = new Job("Run Smack Locally") {
+			protected Process smackProc;
+			
 			/*
 			 * (non-Javadoc)
 			 * 
@@ -57,7 +64,8 @@ public class Controller {
 			 */
 			protected IStatus run(IProgressMonitor monitor) {		
 				final IProject project = file.getProject();
-				String smackOutput = execSmack(file.getRawLocation().toString());
+				smackProc = execSmack(file.getRawLocation().toString());
+				String smackOutput = collectSmackResults(smackProc);
 				final ExecutionResult smackExecutionResult = 
 						TraceParser.parseSmackOutput(project,smackOutput);
 				
@@ -69,6 +77,12 @@ public class Controller {
 				});				
 				
 				return Status.OK_STATUS;
+			}
+			
+			@Override
+			protected void canceling() {
+				if(smackProc != null)
+					smackProc.destroy();
 			}
 		};
 		addJob.schedule();
@@ -177,82 +191,117 @@ public class Controller {
 		return result;
 	}
 
-	//Executes SMACK, returns stdout as a single string
-	public static String execSmack(String filename) {
-		String result = "";
-		//Grab the smack preference store, grab paths
+	
+	private static ProcessBuilder buildSmackProcess(String filenameToVerify) {
+		ProcessBuilder pb = new ProcessBuilder();
+		
+		//Get preference store
 		final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		Logger log = Activator.getDefault().getLogger();
+
+		//Get paths from preference store
 		String smackbin  = preferenceStore.getString(PreferenceConstants.SMACK_BIN);
 		String llvmbin   = preferenceStore.getString(PreferenceConstants.LLVM_BIN);
 		String boogiebin = preferenceStore.getString(PreferenceConstants.BOOGIE_BIN);
 		String corralbin = preferenceStore.getString(PreferenceConstants.CORRAL_BIN);
 		String monobin = preferenceStore.getString(PreferenceConstants.MONO_BIN);
-					
+
+		//Set process command
 		String cmd = "smack-verify.py";
+		List<String> args = Arrays.asList(	smackbin + "/" + cmd,
+											"--smackd",
+											"--verifier", "corral",
+											filenameToVerify);
+		pb.command(args);
+		
+		//So we see error output on console
+		pb.redirectErrorStream(true);
+		
+		//Set up environment
+		Map<String,String> env = pb.environment();
+		
+		log.write(Logger.SMACK_ENV, "CONFIGURING PATH:");
+		//Grab current system path, add what we need
+		String path = System.getenv("PATH");
+		path += ":" + llvmbin;
+		path += ":" + smackbin;
+		env.put("PATH", path);
+		log.write(Logger.SMACK_ENV, "PATH: " + path);
+		
+		//Add the command aliases expected by smack-verify.py
+		String boogieVar = monobin + "/mono " + boogiebin + "/Boogie.exe";
+		String corralVar = monobin + "/mono " + corralbin + "/Debug/corral.exe";
+		env.put("BOOGIE", boogieVar);
+		env.put("CORRAL", corralVar);
+		log.write(Logger.SMACK_ENV, "BOOGIE: " + boogieVar);
+		log.write(Logger.SMACK_ENV, "CORRAL: " + corralVar);
+		
+		return pb;
+	}
+	
+	private static String collectSmackResults(Process p) {
+		StringBuilder result = new StringBuilder();
 
 		try {
-			//Build new process
-			ProcessBuilder pb = new ProcessBuilder(	smackbin + "/" + cmd,
-													"--smackd", "--verifier",
-													"corral", filename);
-
-			//So we see error output on console
-			pb.redirectErrorStream(true);
-			Map<String,String> env = pb.environment();
-			log.write(Logger.SMACK_ENV, "CONFIGURING PATH:");
-			//Grab current system path, add what we need
-			String path = System.getenv("PATH");
-			path += ":" + llvmbin;
-			path += ":" + smackbin;
-			env.put("PATH", path);
+			InputStream is = p.getInputStream();
+			InputStreamReader ir = new InputStreamReader(is);
+			BufferedReader bri = new BufferedReader(ir);
 			
-			log.write(Logger.SMACK_ENV, "PATH: " + path);
-			//Add the command aliases expected by smack-verify.py
-			//TODO User path builder instead, to handle trailing '/' on paths (see java.io.File, new File(baseDirFile,subdirStr))
-			String boogieVar = monobin + "/mono " + boogiebin + "/Boogie.exe";
-			env.put("BOOGIE", boogieVar);
-			log.write(Logger.SMACK_ENV, "BOOGIE: " + boogieVar);
-			String corralVar = monobin + "/mono " + corralbin + "/Debug/corral.exe";
-			env.put("CORRAL", corralVar);
-			log.write(Logger.SMACK_ENV, "CORRAL: " + corralVar);
-			// Start process
-			log.write(Logger.SMACK_EXEC, "Executing SMACK");
-			String commandString = "";
-			for(String s : pb.command())
-				commandString += s + " ";
-			log.write(Logger.SMACK_EXEC, "Calling: " + commandString);
-			Process p;
-			try {
-				p = pb.start();
-			} catch (IOException e) {
-				log.write(Logger.SMACKD_ERR, "IOException raised when executing smack-verify.py");
-				throw e;
+			
+			//If we don't wait till bri has output, the call to bri.read()
+			//  blocks, and deadlocks the threads.
+			while(!bri.ready()) {
+				try {
+					Thread.sleep(100L);
+				} catch (InterruptedException e) {
+					
+				}
 			}
-			// Waaaait for it!
+			
+			
+			int c;
+			while ((c = bri.read()) != -1) {
+				result.append((char)c);
+			}
+			
 			p.waitFor();
 			//TODO throw instead of handling here?  Let caller handle failed smack exec?
-			if(p.exitValue()!=0)
-			{
-				MessageBox a = new MessageBox(Display.getCurrent().getActiveShell());
-				a.setMessage("smack-verify.py failed to terminate normally");
-				a.open();
-			}
+			//if(p.exitValue()!=0)
+			//{
+			//	MessageBox a = new MessageBox(Display.getDefault().getActiveShell());
+			//	a.setMessage("smack-verify.py failed to terminate normally");
+			//	a.open();
+			//}
 			
-			BufferedReader bri = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			
-			String line;
-			while ((line = bri.readLine()) != null) {
-			    result+=line+"\n";
-			}
 			//ParseSmackOutput(result);
-			log.write(Logger.SMACK_OUTPUT, result);
-			return result;
+			log.write(Logger.SMACK_OUTPUT, result.toString());
+			return result.toString();
 		}
 		catch (Exception e) {
 			Activator.getDefault().getLogger().writeStackTrace(Logger.SMACKD_TRACE, e);
 			return "";
 		}
+	}
+
+	//Executes SMACK, returns handle to smack process
+	private static Process execSmack(String filename) {
+		//Build new process
+		ProcessBuilder pb = buildSmackProcess(filename);
+		
+		// Start process
+		log.write(Logger.SMACK_EXEC, "Executing SMACK");
+		String commandString = "";
+		for(String s : pb.command())
+			commandString += s + " ";
+		log.write(Logger.SMACK_EXEC, "Calling: " + commandString);
+		Process p;
+		try {
+			p = pb.start();
+		} catch (IOException e) {
+			log.write(Logger.SMACKD_ERR, "IOException raised when executing smack-verify.py");
+			Activator.getDefault().getLogger().writeStackTrace(Logger.SMACKD_TRACE, e);
+			return null;
+		}
+		return p;
 	}
 	
 	public static void UpdateViews(IProject project, ExecutionResult result) {
@@ -282,7 +331,6 @@ public class Controller {
 	
 	private static void highlight(	IFile file, int lineNo,
 			String desc, int callOrder) throws CoreException {
-
 		IWorkbenchPage ap = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();		
 		ITextEditor editor = (ITextEditor)IDE.openEditor(ap, file, true);
 		IDocument document = editor.getDocumentProvider().getDocument(editor.getEditorInput());
