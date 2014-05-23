@@ -13,12 +13,21 @@
             categoryId="org.smackers.smack.commands.smackCategory"
             id="org.smackers.smack.commands.runSmackCommand">
       </command>
+      <command
+            categoryId="org.smackers.smack.commands.smackCategory"
+            id="org.smackers.smack.commands.runRemoteSmackCommand"
+            name="Run Remote SMACK">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
             commandId="org.smackers.smack.commands.runSmackCommand"
             class="org.smackers.smack.handlers.RunSmackHandler">
+      </handler>
+      <handler
+            class="org.smackers.smack.handlers.RunSmackHandler"
+            commandId="org.smackers.smack.commands.runRemoteSmackCommand">
       </handler>
    </extension>
    <extension
@@ -42,6 +51,12 @@
                   commandId="org.smackers.smack.commands.runSmackCommand"
                   id="org.smackers.smack.menus.runSmackCommand"
                   mnemonic="S">
+            </command>
+            <command
+                  commandId="org.smackers.smack.commands.runRemoteSmackCommand"
+                  id="org.smackers.smack.menus.runRemoteSmackCommand"
+                  mnemonic="R"
+                  style="push">
             </command>
          </menu>
       </menuContribution>

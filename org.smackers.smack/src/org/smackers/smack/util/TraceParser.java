@@ -1,62 +1,84 @@
 package org.smackers.smack.util;
 
+import org.smackers.smack.Activator;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 import javax.json.Json; 
 import javax.json.JsonArray;
+import javax.json.JsonException;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
-import org.eclipse.cdt.core.model.CoreModel;
-import org.eclipse.cdt.core.model.ICElement;
-import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.core.model.IPathEntry;
-import org.eclipse.cdt.core.model.ISourceRoot;
-import org.eclipse.core.filesystem.EFS;
-import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
 public class TraceParser {
 	
+	
+	public static ExecutionResult parseRemoteSmackOutput(IFile file, String output) {
+		
+		ExecutionResult er = new ExecutionResult();
+		
+		//Get smack output
+		InputStream jsonInput = new ByteArrayInputStream(output.getBytes(StandardCharsets.UTF_8));
+		JsonReader jr = Json.createReader(jsonInput);
+		JsonObject jo = jr.readObject();
+		jr.close();
+		String smackOutputJson = jo.getJsonArray("Outputs").getJsonObject(0).getString("Value");
+		
+		String[] lines = smackOutputJson.split("\\r\\n");
+		for(String line : lines) {
+			if(line.startsWith("    input.c(")) {
+				//This is a line for markup...
+				int idx1stPar = line.indexOf('(');
+				//String fileName = line.substring(0, idx1stPar);
+				int idxLineNoComma = line.indexOf(',', idx1stPar);
+				int idxClosePar = line.indexOf(')', idxLineNoComma);
+				int lineNo = Integer.parseInt(line.substring(idx1stPar + 1, idxLineNoComma));
+				String desc;
+				if(line.length() > idxClosePar + 3){
+					desc = line.substring(idxClosePar + 3);
+				} else {
+					desc = "";
+				}
+				er.addTrace(new ExecutionTrace(-1, file.getName(), file, lineNo, 1, desc));
+			}
+		}
+		return er;
+	}
+	
 	//Currently only supports a single source file, which must be passed in.
 	//TODO support multiple source files.  Do IFile resolution here, or in ExecutionTrace
 	public static ExecutionResult parseSmackOutput(IProject project, String output) {
-		
-		ExecutionResult er = new ExecutionResult();
-				
 
-		
-//		if(output.substring(0,"smackd json\n".length()).equals("smackd json")) {
-			// Here, throw away line[0], treat the rest as JSON
-			//String jsonString = output.substring("smackd json\n".length());
-			// Turn it back to input stream
-			//TODO Fix this - when old boogie parsing can go away,
-			//     convert this to using the original inputstream
-			InputStream jsonInput = new ByteArrayInputStream(output.getBytes(StandardCharsets.UTF_8));
-			
-			JsonReader jr = Json.createReader(jsonInput);
-			
+		ExecutionResult er = new ExecutionResult();
+
+		// Turn it back to input stream
+		//TODO Fix this - when old boogie parsing can go away,
+		//     convert this to using the original inputstream
+		InputStream jsonInput = new ByteArrayInputStream(output.getBytes(StandardCharsets.UTF_8));
+		JsonReader jr;
+
+		try {
+			jr = Json.createReader(jsonInput);
+
+
 			JsonObject jo = jr.readObject();
 			jr.close();
-			
+
 			er.setVerifier(jo.getString("verifier"));
 			er.setVerificationPassed(jo.getBoolean("passed?"));
 			er.setThreadCount(jo.getInt("threadCount"));
-			
+
 			JsonObject jsonFailsAt = jo.getJsonObject("failsAt");
 			String failsAtFileName = jsonFailsAt.getString("file");
 			IFile failsAtFile = null;
@@ -67,12 +89,12 @@ public class TraceParser {
 				e.printStackTrace();
 			}
 			ExecutionTrace failsAt = new ExecutionTrace(-1, failsAtFileName,
-														failsAtFile,
-														jsonFailsAt.getInt("line"),
-														jsonFailsAt.getInt("column"),
-														jsonFailsAt.getString("description"));
+					failsAtFile,
+					jsonFailsAt.getInt("line"),
+					jsonFailsAt.getInt("column"),
+					jsonFailsAt.getString("description"));
 			er.setFailsAt(failsAt);
-			
+
 			JsonArray jsonTraces = jo.getJsonArray("traces");
 			for(int x = 0; x < jsonTraces.size(); x++) {
 				JsonObject jsonTrace = jsonTraces.getJsonObject(x);
@@ -85,62 +107,20 @@ public class TraceParser {
 					e.printStackTrace();
 				}
 				ExecutionTrace trace = new ExecutionTrace(	jsonTrace.getInt("threadid"),
-															traceFileName,
-															traceFile,
-															jsonTrace.getInt("line"),
-															jsonTrace.getInt("column"),
-															jsonTrace.getString("description"));
+						traceFileName,
+						traceFile,
+						jsonTrace.getInt("line"),
+						jsonTrace.getInt("column"),
+						jsonTrace.getString("description"));
 				er.addTrace(trace);
 			}
-//		} else {
-			//Here, do old boogie parsing
 
-//			er.setVerifier("boogie");
-//			er.setThreadCount(1);
-			
-			
-//			String[] lines = output.split(System.getProperty("line.separator"));
-			//NOTE: Does not currently support parenthesis in filename
-//			String desc;
-//			int lineNo;
-//			int callOrder = 0;
-//			boolean smackRan = false;
-//			for (int i=0; i < lines.length; i++) {
-//				String line = lines[i];
-//				switch(line.substring(0,Math. min(line.length(),13))) {
-//				case "":
-//					break;
-//				case "SMACK verifie":
-//					smackRan = true;
-//					break;
-//				case "Finished with":
-					// If this line contains ", 0 errors", verification passed
-//					er.setVerificationPassed(line.contains(", 0 errors"));
-//					break;
-//				default:
-//					if(smackRan) {
-						//TODO Get all Smack markers, clear them
-//						int idx1stPar = line.indexOf('(');
-//						String fileName = line.substring(0, idx1stPar);
-//						int idxLineNoComma = line.indexOf(',', idx1stPar);
-//						int idxClosePar = line.indexOf(')', idxLineNoComma);
-//						lineNo = Integer.parseInt(line.substring(idx1stPar + 1, idxLineNoComma));
-//						if(line.length() > idxClosePar + 3){
-//							desc = line.substring(idxClosePar + 3);
-//						} else {
-//							desc = "";
-//						}
-//						er.addTrace(new ExecutionTrace(-1, fileName, file, lineNo, 1, desc));
-						//try{
-						//	highlight(file, lineNo, desc, callOrder++);
-						//}
-						//catch (Exception e) {
-						//	e.printStackTrace();
-						//}
-//					}
-//				}
-//			}
-//		}
+		} catch (JsonException e) {
+			Logger log = Activator.getDefault().getLogger();
+			log.write(Logger.SMACKD_ERR, 
+					"SMACK did not return proper JSON output. Exception Message: " + e.getMessage());
+			return new ExecutionResult();
+		}			
 		return er;
 	}
 	

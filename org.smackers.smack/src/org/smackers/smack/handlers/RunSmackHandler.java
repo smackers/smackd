@@ -9,16 +9,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-//import org.eclipse.core.runtime.CoreException;
-//import org.eclipse.core.runtime.IProgressMonitor;
-//import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-//import org.eclipse.core.runtime.jobs.Job;
-
 import org.smackers.smack.util.Controller;
-import org.smackers.smack.util.ExecutionResult;
-import org.smackers.smack.util.TraceParser;
 
 
 /**
@@ -40,32 +31,23 @@ public class RunSmackHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException { 
 		final IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 		final IEditorInput input = HandlerUtil.getActiveEditorInput(event);
-		//Job addJob = new Job("Add Markers") {
+		String eventCommandId = event.getCommand().getId();
+		
+		if (input instanceof IFileEditorInput) {  
+			IFileEditorInput fileInput = (IFileEditorInput) input;
+			IFile file = fileInput.getFile();
 
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)
-			 */
-//			protected IStatus run(IProgressMonitor monitor) {
-
-					if (input instanceof IFileEditorInput) {  
-						IFileEditorInput fileInput = (IFileEditorInput) input;
-						IFile file = fileInput.getFile();
-						IProject project = file.getProject();
-						String smackOutput = Controller.execSmack(file.getRawLocation().toString());
-						ExecutionResult smackExecutionResult = TraceParser.parseSmackOutput(project,smackOutput);
-						Controller.UpdateViews(project, smackExecutionResult);
-					} else {
-						MessageDialog.openInformation(
-								window.getShell(),
-								"Test", 
-								"Hello, Eclipse world");
-					}
-				return Status.OK_STATUS;
-//			}
-	//	};
-		//addJob.schedule();
-//		return this;
+			if(eventCommandId.equals("org.smackers.smack.commands.runSmackCommand"))
+				Controller.smackVerifyLocal(file);
+			else if(eventCommandId.equals("org.smackers.smack.commands.runRemoteSmackCommand"))
+				Controller.smackVerifyRemote(file);
+			
+		} else {
+			MessageDialog.openInformation(
+					window.getShell(),
+					"No Project", 
+					"Switch focus to the editor containing the file to verify");
+		}
+		return this;
 	}
 }
