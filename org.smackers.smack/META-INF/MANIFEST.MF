@@ -14,8 +14,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.filesystem;bundle-version="1.4.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: .,
- lib/javax.json-1.0.3.jar
+Bundle-ClassPath: lib/javax.json-1.0.3.jar,
+ .
 Import-Package: org.eclipse.cdt.core.model,
  org.eclipse.cdt.core.resources,
  org.eclipse.ui.console
