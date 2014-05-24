@@ -11,22 +11,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.text,
  org.eclipse.ui.workbench.texteditor,
  org.eclipse.cdt,
- org.eclipse.core.filesystem;bundle-version="1.4.0"
+ org.eclipse.core.filesystem;bundle-version="1.4.0",
+ org.smackers.smack.json;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: lib/javax.json-1.0.3.jar,
- .
+Bundle-ClassPath: .
 Import-Package: org.eclipse.cdt.core.model,
  org.eclipse.cdt.core.resources,
  org.eclipse.ui.console
-Export-Package: javax.json,
- javax.json.spi,
- javax.json.stream,
- org.glassfish.json,
- org.glassfish.json.api,
- org.smackers.smack,
- org.smackers.smack.handlers,
- org.smackers.smack.markers,
- org.smackers.smack.preferences,
- org.smackers.smack.util,
- org.smackers.smack.views
