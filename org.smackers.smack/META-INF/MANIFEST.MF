@@ -11,11 +11,12 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.text,
  org.eclipse.ui.workbench.texteditor,
  org.eclipse.cdt,
- org.eclipse.core.filesystem;bundle-version="1.4.0",
- org.smackers.smack.json;bundle-version="1.0.0"
+ org.eclipse.core.filesystem;bundle-version="1.4.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: .
-Import-Package: org.eclipse.cdt.core.model,
+Bundle-ClassPath: .,
+ lib/javax.json-1.0.3.jar
+Import-Package: javax.json,
+ org.eclipse.cdt.core.model,
  org.eclipse.cdt.core.resources,
  org.eclipse.ui.console
