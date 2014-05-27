@@ -97,7 +97,10 @@ public class TraceParser {
 
 			JsonArray jsonTraces = jo.getJsonArray("traces");
 			for(int x = 0; x < jsonTraces.size(); x++) {
+				Activator.getDefault().getLogger().write(Logger.SMACKD_ERR, "x = " + x);
 				JsonObject jsonTrace = jsonTraces.getJsonObject(x);
+				if(jsonTrace == null)
+					Activator.getDefault().getLogger().write(Logger.SMACKD_ERR, "jsonTrace is null");
 				String traceFileName = jsonTrace.getString("file");
 				IFile traceFile = null;
 				try {
