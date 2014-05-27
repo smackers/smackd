@@ -99,15 +99,14 @@ public class TraceParser {
 			for(int x = 0; x < jsonTraces.size(); x++) {
 				Activator.getDefault().getLogger().write(Logger.SMACKD_ERR, "x = " + x);
 				JsonObject jsonTrace = jsonTraces.getJsonObject(x);
-				if(jsonTrace == null)
-					Activator.getDefault().getLogger().write(Logger.SMACKD_ERR, "jsonTrace is null");
+				Activator.getDefault().getLogger().write(Logger.SMACKD_ERR, "jsonTrace.ToString() is " + jsonTrace.toString());
 				String traceFileName = jsonTrace.getString("file");
 				IFile traceFile = null;
 				try {
 					traceFile = getIFile(project, traceFileName);
 				} catch (CoreException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Activator.getDefault().getLogger().writeStackTrace(Logger.SMACKD_ERR, e);
 				}
 				ExecutionTrace trace = new ExecutionTrace(	jsonTrace.getInt("threadid"),
 						traceFileName,
