@@ -74,6 +74,9 @@ public class TraceParser {
 
 			JsonObject jo = jr.readObject();
 			jr.close();
+			
+
+			Activator.getDefault().getLogger().write(Logger.SMACKD_ERR, jo.toString());
 
 			er.setVerifier(jo.getString("verifier"));
 			er.setVerificationPassed(jo.getBoolean("passed?"));
