@@ -7,6 +7,8 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.core.resources.IFile;
@@ -35,6 +37,12 @@ public class RunSmackHandler extends AbstractHandler {
 		String eventCommandId = event.getCommand().getId();
 		
 		if (input instanceof IFileEditorInput) {
+			try {
+				PlatformUI.getWorkbench().showPerspective("org.eclipse.cdt.ui.CPerspective", window);
+			} catch (WorkbenchException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			try {
 				window.getActivePage().showView("org.smackers.smack.views.SmackMarkView");
 			} catch (PartInitException e) {
