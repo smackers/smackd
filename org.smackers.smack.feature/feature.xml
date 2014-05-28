@@ -22,6 +22,10 @@ analyzed by SMACK.
       <update label="SMACK&apos;D" url="http://smackers.github.io/smackd"/>
    </url>
 
+   <requires>
+      <import feature="org.eclipse.cdt"/>
+   </requires>
+
    <plugin
          id="org.smackers.smack"
          download-size="0"
