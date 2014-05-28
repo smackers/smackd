@@ -304,16 +304,20 @@ public class Controller {
 		return p;
 	}
 	
+	public static void ClearSmackView(IProject project) {
+		//Clear old markers
+		int depth = IResource.DEPTH_INFINITE;
+		try {
+			project.deleteMarkers("org.smackers.smack.markers.smackAssertionFailedMarker", true, depth);
+			project.deleteMarkers("org.smackers.smack.markers.smackAssertionTraceMarker", true, depth);
+		} catch (CoreException e) {
+			// something went wrong
+		}		
+	}
+	
 	public static void UpdateViews(IProject project, ExecutionResult result) {
 		if(!result.isVerificationPassed()) {
-			//Clear old markers
-			int depth = IResource.DEPTH_INFINITE;
-			try {
-				project.deleteMarkers("org.smackers.smack.markers.smackAssertionFailedMarker", true, depth);
-				project.deleteMarkers("org.smackers.smack.markers.smackAssertionTraceMarker", true, depth);
-			} catch (CoreException e) {
-				// something went wrong
-			}
+			ClearSmackView(project);
 			
 			// And update with new markers
 			ArrayList<ExecutionTrace> traces = result.getTraces();
