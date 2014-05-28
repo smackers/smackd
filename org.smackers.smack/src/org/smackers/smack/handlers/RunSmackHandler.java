@@ -6,6 +6,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.core.resources.IFile;
@@ -33,7 +34,14 @@ public class RunSmackHandler extends AbstractHandler {
 		final IEditorInput input = HandlerUtil.getActiveEditorInput(event);
 		String eventCommandId = event.getCommand().getId();
 		
-		if (input instanceof IFileEditorInput) {  
+		if (input instanceof IFileEditorInput) {
+			try {
+				window.getActivePage().showView("org.smackers.smack.views.SmackMarkView");
+			} catch (PartInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			IFileEditorInput fileInput = (IFileEditorInput) input;
 			IFile file = fileInput.getFile();
 
