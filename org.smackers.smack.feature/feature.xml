@@ -23,18 +23,7 @@ analyzed by SMACK.
    </url>
 
    <requires>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.ui.ide"/>
-      <import plugin="org.eclipse.jface.text"/>
-      <import plugin="org.eclipse.ui.workbench.texteditor"/>
-      <import plugin="org.eclipse.cdt"/>
-      <import plugin="org.eclipse.core.filesystem" version="1.4.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.cdt.ui"/>
-      <import plugin="org.eclipse.cdt.core"/>
-      <import plugin="org.eclipse.ui.console"/>
-      <import feature="org.eclipse.cdt.feature.group"/>
+      <import feature="org.eclipse.cdt"/>
    </requires>
 
    <plugin
