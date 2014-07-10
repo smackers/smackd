@@ -18,6 +18,11 @@
             id="org.smackers.smack.commands.runRemoteSmackCommand"
             name="Run Remote SMACK">
       </command>
+      <command
+            categoryId="org.smackers.smack.commands.smackCategory"
+            id="org.smackers.smack.commands.clearMarkersCommand"
+            name="Clear Markers">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -28,6 +33,10 @@
       <handler
             class="org.smackers.smack.handlers.RunSmackHandler"
             commandId="org.smackers.smack.commands.runRemoteSmackCommand">
+      </handler>
+      <handler
+            class="org.smackers.smack.handlers.ClearMarkersHandler"
+            commandId="org.smackers.smack.commands.clearMarkersCommand">
       </handler>
    </extension>
    <extension
@@ -58,6 +67,12 @@
                   mnemonic="R"
                   style="push">
             </command>
+            <command
+                  commandId="org.smackers.smack.commands.clearMarkersCommand"
+                  icon="icons/delete_obj.gif"
+                  style="push"
+                  tooltip="Clear">
+            </command>
          </menu>
       </menuContribution>
       <menuContribution
@@ -66,12 +81,53 @@
                id="org.smackers.smack.toolbars.smackToolbar">
             <command
                   commandId="org.smackers.smack.commands.runSmackCommand"
-
-                  tooltip="Run SMACK"
-                  id="org.smackers.smack.toolbars.runSmackCommand">
+                  icon="icons/sample.gif"
+                  id="org.smackers.smack.toolbars.runSmackCommand"
+                  style="push"
+                  tooltip="Run SMACK">
             </command>
                   <!-- icon="icons/sample.gif" Goes in "command" node of this toolbar node-->
          </toolbar>
+      </menuContribution>
+      <menuContribution
+            locationURI="menu:org.smackers.smack.views.SmackMarkView">
+         <command
+               commandId="org.smackers.smack.commands.runSmackCommand"
+               mnemonic="S"
+               mode="FORCE_TEXT"
+               style="push"
+               tooltip="Run Smack Locally">
+         </command>
+         <command
+               commandId="org.smackers.smack.commands.runRemoteSmackCommand"
+               mnemonic="R"
+               style="push"
+               tooltip="Run Smack Remotely">
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.smackers.smack.views.SmackMarkView">
+         <command
+               commandId="org.smackers.smack.commands.runSmackCommand"
+               icon="icons/sample.gif"
+               mnemonic="S"
+               mode="FORCE_TEXT"
+               style="push"
+               tooltip="Run Smack Locally">
+         </command>
+         <command
+               commandId="org.smackers.smack.commands.runRemoteSmackCommand"
+               icon="icons/sample.gif"
+               mnemonic="R"
+               style="push"
+               tooltip="Run Smack Remotely">
+         </command>
+         <command
+               commandId="org.smackers.smack.commands.clearMarkersCommand"
+               icon="icons/delete_obj.gif"
+               style="push"
+               tooltip="Clear">
+         </command>
       </menuContribution>
    </extension>
    
@@ -147,6 +203,13 @@
                id="org.eclipse.ui.ide.locationField"/>
          <markerFieldReference
                id="org.eclipse.ui.ide.markerType"/>
+         <!-- Show markers only for active project -->
+         <markerFieldConfiguration
+               enabled="true"
+               id="org.smackers.smack.ProjectOnly"
+               name="Project Only"
+               scope="ON_ANY_IN_SAME_CONTAINER">
+         </markerFieldConfiguration>
       </markerContentGenerator>
    </extension>   
 <!-- Begin Assertion Failed Marker Extension -->

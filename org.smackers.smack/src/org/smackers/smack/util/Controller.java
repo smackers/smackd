@@ -34,12 +34,16 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.smackers.smack.Activator;
 import org.smackers.smack.preferences.PreferenceConstants;
+import org.smackers.smack.views.SmackMarkView;
 
 /**
  * @author mcarter
@@ -304,20 +308,33 @@ public class Controller {
 		return p;
 	}
 	
-	public static void ClearSmackView(IProject project) {
-		//Clear old markers
+	public static void ClearSmackView() {
+		//Clears currently displayed markers
+		final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		try {
+			IViewPart view = window.getActivePage().showView("org.smackers.smack.views.SmackMarkView");
+			((SmackMarkView)view).deleteCurrentMarkers();
+		} catch (PartInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public static void ClearProjectMarkers(IProject project) {
+		//Clears any markers for project
 		int depth = IResource.DEPTH_INFINITE;
 		try {
 			project.deleteMarkers("org.smackers.smack.markers.smackAssertionFailedMarker", true, depth);
 			project.deleteMarkers("org.smackers.smack.markers.smackAssertionTraceMarker", true, depth);
 		} catch (CoreException e) {
 			// something went wrong
-		}		
+		}	
 	}
 	
 	public static void UpdateViews(IProject project, ExecutionResult result) {
 		if(!result.isVerificationPassed()) {
-			ClearSmackView(project);
+			ClearProjectMarkers(project);
 			
 			// And update with new markers
 			ArrayList<ExecutionTrace> traces = result.getTraces();
