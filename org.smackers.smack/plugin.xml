@@ -9,22 +9,76 @@
             id="org.smackers.smack.commands.smackCategory">
       </category>
       <command
-            name="Run SMACK"
+            name="Get Smack&apos;d Verify"
             categoryId="org.smackers.smack.commands.smackCategory"
-            id="org.smackers.smack.commands.runSmackCommand">
+            id="org.smackers.smack.commands.runSmackVerifyCommand">
+      </command>
+      <command
+            categoryId="org.smackers.smack.commands.smackCategory"
+            id="org.smackers.smack.commands.runRemoteSmackVerifyCommand"
+            name="Get Remote Smack&apos;d Verify">
+      </command>
+      <command
+            categoryId="org.smackers.smack.commands.smackCategory"
+            id="org.smackers.smack.commands.runSmackReachCommand"
+            name="Get Smack&apos;d Reach">
+      </command>
+      <command
+            categoryId="org.smackers.smack.commands.smackCategory"
+            id="org.smackers.smack.commands.clearVerifyMarkersCommand"
+            name="Clear Verify Markers">
+      </command>
+      <command
+            categoryId="org.smackers.smack.commands.smackCategory"
+            id="org.smackers.smack.commands.clearReachMarkersCommand"
+            name="Clear Reach Markers">
+      </command>
+      <command
+            categoryId="org.smackers.smack.commands.smackCategory"
+            id="org.smackers.smack.commands.selectNextMarkerCommand"
+            name="Select Next Marker">
+      </command>
+      <command
+            categoryId="org.smackers.smack.commands.smackCategory"
+            id="org.smackers.smack.commands.selectPreviousMarkerCommand"
+            name="Select Previous Marker">
       </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            commandId="org.smackers.smack.commands.runSmackCommand"
+            commandId="org.smackers.smack.commands.runSmackVerifyCommand"
             class="org.smackers.smack.handlers.RunSmackHandler">
+      </handler>
+      <handler
+            class="org.smackers.smack.handlers.RunSmackHandler"
+            commandId="org.smackers.smack.commands.runRemoteSmackVerifyCommand">
+      </handler>
+      <handler
+            class="org.smackers.smack.handlers.RunSmackHandler"
+            commandId="org.smackers.smack.commands.runSmackReachCommand">
+      </handler>
+      <handler
+            class="org.smackers.smack.handlers.ChangeMarkerViewHandler"
+            commandId="org.smackers.smack.commands.clearVerifyMarkersCommand">
+      </handler>
+      <handler
+            class="org.smackers.smack.handlers.ChangeMarkerViewHandler"
+            commandId="org.smackers.smack.commands.clearReachMarkersCommand">
+      </handler>
+      <handler
+            class="org.smackers.smack.handlers.ChangeMarkerViewHandler"
+            commandId="org.smackers.smack.commands.selectNextMarkerCommand">
+      </handler>
+      <handler
+            class="org.smackers.smack.handlers.ChangeMarkerViewHandler"
+            commandId="org.smackers.smack.commands.selectPreviousMarkerCommand">
       </handler>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
       <key
-            commandId="org.smackers.smack.commands.runSmackCommand"
+            commandId="org.smackers.smack.commands.runSmackVerifyCommand"
             contextId="org.eclipse.ui.contexts.window"
             sequence="M1+6"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
@@ -36,37 +90,147 @@
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
          <menu
                id="org.smackers.smack.menus.smackMenu"
-               label="SMACK Menu"
+               label="Smack&apos;d"
                mnemonic="M">
             <command
-                  commandId="org.smackers.smack.commands.runSmackCommand"
-                  id="org.smackers.smack.menus.runSmackCommand"
+                  commandId="org.smackers.smack.commands.runSmackVerifyCommand"
+                  id="org.smackers.smack.menus.runSmackVerifyCommand"
+                  mnemonic="S">
+            </command>
+            <command
+                  commandId="org.smackers.smack.commands.runRemoteSmackVerifyCommand"
+                  id="org.smackers.smack.menus.runRemoteSmackVerifyCommand"
+                  mnemonic="R"
+                  style="push">
+            </command>
+            <separator
+                  name="org.smackers.smack.separator1"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="org.smackers.smack.commands.runSmackReachCommand"
+                  id="org.smackers.smack.menus.runSmackReachCommand"
                   mnemonic="S">
             </command>
          </menu>
       </menuContribution>
       <menuContribution
-            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
-         <toolbar
-               id="org.smackers.smack.toolbars.smackToolbar">
-            <command
-                  commandId="org.smackers.smack.commands.runSmackCommand"
-
-                  tooltip="Run SMACK"
-                  id="org.smackers.smack.toolbars.runSmackCommand">
-            </command>
-                  <!-- icon="icons/sample.gif" Goes in "command" node of this toolbar node-->
-         </toolbar>
+            locationURI="menu:org.smackers.smack.views.SmackVerifyView">
+         <command
+               commandId="org.smackers.smack.commands.runSmackVerifyCommand"
+               mnemonic="S"
+               mode="FORCE_TEXT"
+               style="push">
+         </command>
+         <command
+               commandId="org.smackers.smack.commands.runRemoteSmackVerifyCommand"
+               mnemonic="R"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="menu:org.smackers.smack.views.SmackReachView">
+         <command
+               commandId="org.smackers.smack.commands.runSmackReachCommand"
+               mnemonic="S"
+               mode="FORCE_TEXT"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.smackers.smack.views.SmackVerifyView">
+         <command
+               commandId="org.smackers.smack.commands.selectPreviousMarkerCommand"
+               icon="icons/prev_nav.gif"
+               style="push">
+         </command>
+         <command
+               commandId="org.smackers.smack.commands.selectNextMarkerCommand"
+               icon="icons/next_nav.gif"
+               mnemonic="S"
+               style="push">
+         </command>
+         <separator
+               name="org.smackers.smack.separator2"
+               visible="true">
+         </separator>
+         <command
+               commandId="org.smackers.smack.commands.runSmackVerifyCommand"
+               icon="icons/SmackdLogo16.png"
+               mnemonic="S"
+               style="push"
+               tooltip="Get Smack&apos;d Verify">
+         </command>
+         <command
+               commandId="org.smackers.smack.commands.runRemoteSmackVerifyCommand"
+               icon="icons/SmackdLogo16.png"
+               mnemonic="R"
+               style="push"
+               tooltip="Get Remote Smack&apos;d Verify">
+         </command>
+         <separator
+               name="org.smackers.smack.separator3"
+               visible="true">
+         </separator>
+         <command
+               commandId="org.smackers.smack.commands.clearVerifyMarkersCommand"
+               icon="icons/delete_obj.gif"
+               style="push"
+               tooltip="Clear Verify Markers">
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.smackers.smack.views.SmackReachView">
+         <command
+               commandId="org.smackers.smack.commands.selectPreviousMarkerCommand"
+               icon="icons/prev_nav.gif"
+               style="push">
+         </command>
+         <command
+               commandId="org.smackers.smack.commands.selectNextMarkerCommand"
+               icon="icons/next_nav.gif"
+               mnemonic="S"
+               style="push">
+         </command>
+         <separator
+               name="org.smackers.smack.separator4"
+               visible="true">
+         </separator>
+         <command
+               commandId="org.smackers.smack.commands.runSmackReachCommand"
+               icon="icons/SmackdLogo16.png"
+               mnemonic="S"
+               style="push">
+         </command>
+         <command
+               commandId="org.smackers.smack.commands.clearReachMarkersCommand"
+               icon="icons/delete_obj.gif"
+               style="push"
+               tooltip="Clear Reach Markers">
+         </command>
       </menuContribution>
    </extension>
    
    <extension
          point="org.eclipse.ui.views">
       <view
-            class="org.smackers.smack.views.SmackMarkView"
-            id="org.smackers.smack.views.SmackMarkView"
-            name="SMACK View">
+            category="org.smackers.smack.views.smackdCategory"
+            class="org.smackers.smack.views.SmackVerifyView"
+            icon="icons/SmackdLogo16.png"
+            id="org.smackers.smack.views.SmackVerifyView"
+            name="Smack&apos;d Verify">
       </view>
+      <view
+            category="org.smackers.smack.views.smackdCategory"
+            class="org.smackers.smack.views.SmackReachView"
+            icon="icons/SmackdLogo16.png"
+            id="org.smackers.smack.views.SmackReachView"
+            name="Smack&apos;d Reach">
+      </view>
+      <category
+            id="org.smackers.smack.views.smackdCategory"
+            name="Smack&apos;d">
+      </category>
                   <!-- icon="icons/sample.gif" Goes in "view" node of this extension node-->      
    </extension>
    <extension
@@ -74,7 +238,13 @@
       <perspectiveExtension
             targetID="org.eclipse.cdt.ui.CPerspective">
          <view
-               id="org.smackers.smack.views.SmackMarkView"
+               id="org.smackers.smack.views.SmackVerifyView"
+               ratio="0.5"
+               relationship="stack"
+               relative="org.eclipse.ui.views.ProblemView">
+         </view>
+         <view
+               id="org.smackers.smack.views.SmackReachView"
                ratio="0.5"
                relationship="stack"
                relative="org.eclipse.ui.views.ProblemView">
@@ -86,7 +256,19 @@
       <page
             class="org.smackers.smack.preferences.SmackPreferences"
             id="org.smackers.smack.preferences.SmackPreferences"
-            name="Smack Preferences">
+            name="Smack&apos;d">
+      </page>
+      <page
+            category="org.smackers.smack.preferences.SmackPreferences"
+            class="org.smackers.smack.preferences.DebugPreferences"
+            id="org.smackers.smack.preferences.DebugPreferences"
+            name="Debug">
+      </page>
+      <page
+            category="org.smackers.smack.preferences.SmackPreferences"
+            class="org.smackers.smack.preferences.RemotePreferences"
+            id="org.smackers.smack.preferences.RemotePreferences"
+            name="Remote">
       </page>
    </extension>
    <extension
@@ -102,8 +284,8 @@
             id="org.smackers.smack.markers.callOrderField"
             name="Call Order"/>
       <markerContentGenerator
-            id="org.smackers.smack.markers.SmackMarkerGenerator"
-            name="SMACK Marker Generator">
+            id="org.smackers.smack.markers.SmackdVerifyMarkerGenerator"
+            name="Smack&apos;d Verify Marker Generator">
          <markerTypeReference 
 		       id="org.smackers.smack.markers.smackAssertionFailedMarker"/>
          <markerTypeReference 
@@ -120,6 +302,44 @@
                id="org.eclipse.ui.ide.locationField"/>
          <markerFieldReference
                id="org.eclipse.ui.ide.markerType"/>
+         <!-- Show markers only for active project -->
+         <markerFieldConfiguration
+               enabled="true"
+               id="org.smackers.smack.ProjectOnly"
+               name="Project Only"
+               scope="ON_ANY_IN_SAME_CONTAINER">
+         </markerFieldConfiguration>
+      </markerContentGenerator>
+      <markerContentGenerator
+            id="org.smackers.smack.markers.SmackdReachMarkerGenerator"
+            name="Smack&apos;d Reach Marker Generator">
+         <markerTypeReference
+               id="org.smackers.smack.markers.smackUnreachableMarker">
+         </markerTypeReference>
+         <markerFieldReference
+               id="org.smackers.smack.markers.callOrderField">
+         </markerFieldReference>
+         <markerFieldReference
+               id="org.eclipse.ui.ide.severityAndDescriptionField">
+         </markerFieldReference>
+         <markerFieldReference
+               id="org.eclipse.ui.ide.resourceField">
+         </markerFieldReference>
+         <markerFieldReference
+               id="org.eclipse.ui.ide.pathField">
+         </markerFieldReference>
+         <markerFieldReference
+               id="org.eclipse.ui.ide.locationField">
+         </markerFieldReference>
+         <markerFieldReference
+               id="org.eclipse.ui.ide.markerType">
+         </markerFieldReference>
+         <markerFieldConfiguration
+               enabled="true"
+               id="org.smackers.smack.ProjectOnly"
+               name="Project Only"
+               scope="ON_ANY_IN_SAME_CONTAINER">
+         </markerFieldConfiguration>
       </markerContentGenerator>
    </extension>   
 <!-- Begin Assertion Failed Marker Extension -->
@@ -197,6 +417,45 @@
             textPreferenceValue="true"
             textStylePreferenceValue="BOX"
             verticalRulerPreferenceKey="org.smackers.smack.markers.smackAssertionTraceMarker.ruler"
+            verticalRulerPreferenceValue="true">
+      </specification>
+   </extension>
+   <extension
+         id="org.smackers.smack.markers.smackUnreachableMarker"
+         name="SMACK Unreachable Marker"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.textmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.annotationTypes">
+      <type
+            markerType="org.smackers.smack.markers.smackUnreachableMarker"
+            name="org.smackers.smack.markers.smackUnreachableMarker">
+      </type>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.markerAnnotationSpecification">
+      <specification
+            annotationType="org.smackers.smack.markers.smackUnreachableMarker"
+            colorPreferenceKey="org.smackers.smack.markers.smackUnreachableMarker.color"
+            colorPreferenceValue="221,186,255"
+            contributesToHeader="false"
+            highlightPreferenceKey="org.smackers.smack.markers.smackUnreachableMarker.highlight"
+            highlightPreferenceValue="true"
+            includeOnPreferencePage="true"
+            label="SMACK Unreachable Marker"
+            overviewRulerPreferenceKey="org.smackers.smack.markers.smackUnreachableMarker.overview"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="0"
+            textPreferenceKey="org.smackers.smack.markers.smackUnreachableMarker.text"
+            textPreferenceValue="true"
+            textStylePreferenceValue="BOX"
+            verticalRulerPreferenceKey="org.smackers.smack.markers.smackUnreachableMarker.ruler"
             verticalRulerPreferenceValue="true">
       </specification>
    </extension>
