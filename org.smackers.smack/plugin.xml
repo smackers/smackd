@@ -142,14 +142,12 @@
          <command
                commandId="org.smackers.smack.commands.selectPreviousMarkerCommand"
                icon="icons/prev_nav.gif"
-               mode="FORCE_TEXT"
                style="push">
          </command>
          <command
                commandId="org.smackers.smack.commands.selectNextMarkerCommand"
                icon="icons/next_nav.gif"
                mnemonic="S"
-               mode="FORCE_TEXT"
                style="push">
          </command>
          <separator
@@ -160,7 +158,6 @@
                commandId="org.smackers.smack.commands.runSmackVerifyCommand"
                icon="icons/SmackdLogo16.png"
                mnemonic="S"
-               mode="FORCE_TEXT"
                style="push"
                tooltip="Get Smack&apos;d Verify">
          </command>
@@ -187,14 +184,12 @@
          <command
                commandId="org.smackers.smack.commands.selectPreviousMarkerCommand"
                icon="icons/prev_nav.gif"
-               mode="FORCE_TEXT"
                style="push">
          </command>
          <command
                commandId="org.smackers.smack.commands.selectNextMarkerCommand"
                icon="icons/next_nav.gif"
                mnemonic="S"
-               mode="FORCE_TEXT"
                style="push">
          </command>
          <separator
@@ -205,7 +200,6 @@
                commandId="org.smackers.smack.commands.runSmackReachCommand"
                icon="icons/SmackdLogo16.png"
                mnemonic="S"
-               mode="FORCE_TEXT"
                style="push">
          </command>
          <command
