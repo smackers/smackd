@@ -19,14 +19,14 @@ import org.smackers.smack.Activator;
  * be accessed directly via the preference store.
  */
 
-public class SmackPreferences
+public class DebugPreferences
 	extends FieldEditorPreferencePage
 	implements IWorkbenchPreferencePage {
 
-	public SmackPreferences() {
+	public DebugPreferences() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("SMACK'D Options");
+		setDescription("Debugging Options");
 	}
 	
 	/**
@@ -36,26 +36,14 @@ public class SmackPreferences
 	 * restore itself.
 	 */
 	public void createFieldEditors() {
-		addField(new DirectoryFieldEditor(	PreferenceConstants.LLVM_BIN, 
-											"&LLVM bin Path:",
+		
+		addField(new BooleanFieldEditor(	PreferenceConstants.DEBUG_MODE,
+											"Debug mode:",
 											getFieldEditorParent()));
 		
-		addField(new DirectoryFieldEditor(	PreferenceConstants.SMACK_BIN,
-											"&SMACK bin Path:",
+		addField(new FileFieldEditor(		PreferenceConstants.LOG_FILE,
+											"Log File:",
 											getFieldEditorParent()));
-
-		addField(new DirectoryFieldEditor(	PreferenceConstants.BOOGIE_BIN,
-											"&Boogie bin Path:",
-											getFieldEditorParent()));
-		
-		addField(new DirectoryFieldEditor(	PreferenceConstants.CORRAL_BIN,
-											"Corral bin Path:",
-											getFieldEditorParent()));
-		
-		addField(new DirectoryFieldEditor(	PreferenceConstants.MONO_BIN,
-											"Mono bin Path:",
-											getFieldEditorParent()));
-		
 	}
 
 	/* (non-Javadoc)
@@ -63,5 +51,4 @@ public class SmackPreferences
 	 */
 	public void init(IWorkbench workbench) {
 	}
-	
 }

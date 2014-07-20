@@ -19,14 +19,14 @@ import org.smackers.smack.Activator;
  * be accessed directly via the preference store.
  */
 
-public class SmackPreferences
+public class RemotePreferences
 	extends FieldEditorPreferencePage
 	implements IWorkbenchPreferencePage {
 
-	public SmackPreferences() {
+	public RemotePreferences() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("SMACK'D Options");
+		setDescription("Remote Verification Option");
 	}
 	
 	/**
@@ -36,25 +36,10 @@ public class SmackPreferences
 	 * restore itself.
 	 */
 	public void createFieldEditors() {
-		addField(new DirectoryFieldEditor(	PreferenceConstants.LLVM_BIN, 
-											"&LLVM bin Path:",
-											getFieldEditorParent()));
 		
-		addField(new DirectoryFieldEditor(	PreferenceConstants.SMACK_BIN,
-											"&SMACK bin Path:",
-											getFieldEditorParent()));
-
-		addField(new DirectoryFieldEditor(	PreferenceConstants.BOOGIE_BIN,
-											"&Boogie bin Path:",
-											getFieldEditorParent()));
-		
-		addField(new DirectoryFieldEditor(	PreferenceConstants.CORRAL_BIN,
-											"Corral bin Path:",
-											getFieldEditorParent()));
-		
-		addField(new DirectoryFieldEditor(	PreferenceConstants.MONO_BIN,
-											"Mono bin Path:",
-											getFieldEditorParent()));
+		addField(new StringFieldEditor(	PreferenceConstants.SMACK_SERVER,
+										"SMACK Server URL:",
+										getFieldEditorParent()));
 		
 	}
 
@@ -63,5 +48,4 @@ public class SmackPreferences
 	 */
 	public void init(IWorkbench workbench) {
 	}
-	
 }

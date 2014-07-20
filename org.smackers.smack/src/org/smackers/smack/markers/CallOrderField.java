@@ -26,5 +26,9 @@ public class CallOrderField extends MarkerField {
 		return 20;
 	}
 	
+	@Override
+	public int compare(MarkerItem item1, MarkerItem item2) {
+		return item1.getAttributeValue("callOrder",0) - item2.getAttributeValue("callOrder",0);
+	}
 
 }
