@@ -12,6 +12,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
 
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -38,7 +39,7 @@ public class SmackJobReach extends SmackJob {
 	
 	//Stores unreachable lines in ExecutionResult.Traces - nothing else of ER is used.
 	//TODO support multiple source files.  Do IFile resolution here, or in ExecutionTrace
-	protected ExecutionResult parseSmackOutput(IProject project, String output) {
+	protected ExecutionResult parseSmackOutput(IProject project, String output) throws ExecutionException {
 
 		ExecutionResult er = new ExecutionResult();
 
@@ -89,9 +90,11 @@ public class SmackJobReach extends SmackJob {
 
 		} catch (JsonException e) {
 			Logger log = Activator.getDefault().getLogger();
-			log.write(Logger.SMACKD_ERR, 
-					"SMACK did not return proper JSON output. Exception Message: " + e.getMessage());
-			return new ExecutionResult();
+			String msg = "SMACK did not return proper JSON output. Exception Message:\n\n" + e.getMessage();
+			msg += "\n\nSMACK Ouput:\n" + output;
+			log.write(Logger.SMACKD_ERR, msg);
+					
+			throw new ExecutionException(msg);
 		}			
 		return er;
 	}

@@ -119,7 +119,7 @@ public abstract class SmackJob extends Job {
 			e = e1;
 			e1.printStackTrace();
 			Activator.getDefault().getLogger().writeStackTrace(Logger.SMACKD_TRACE, e);
-			errMsg = "Smack terminated abnormally, with the following output:\n\n" + e.getMessage();
+			errMsg = e.getMessage();
 		} catch (ConnectException e1) {
 			e = e1;
 			errMsg = "Connection to remote server refused or timed out (" + e.getMessage() + ")";
@@ -267,12 +267,12 @@ public abstract class SmackJob extends Job {
 		if(p.exitValue()!=0)
 		{
 			
-			throw new ExecutionException(result.toString());
+			throw new ExecutionException("Smack terminated abnormally, with the following output:\n\n" + result.toString());
 		}
 		return result.toString();
 	}
 	
-	protected abstract ExecutionResult parseSmackOutput(IProject project, String output);
+	protected abstract ExecutionResult parseSmackOutput(IProject project, String output) throws ExecutionException;
 	
 	private static IFile findIFileInProjectRecursively(IContainer project, String name) throws CoreException {
 		IResource[] rs = project.members();

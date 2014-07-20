@@ -2,7 +2,7 @@
 <feature
       id="org.smackers.smack.feature"
       label="SMACK&apos;D"
-      version="1.1.0"
+      version="2.0.0"
       provider-name="smackers">
 
    <description url="http://smackers.github.io/smackd">
@@ -24,12 +24,13 @@ analyzed by SMACK.
 
    <requires>
       <import feature="org.eclipse.cdt"/>
+      <import feature="org.eclipse.cdt"/>
    </requires>
 
    <plugin
          id="org.smackers.smack"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="2.0.0"/>
 
 </feature>

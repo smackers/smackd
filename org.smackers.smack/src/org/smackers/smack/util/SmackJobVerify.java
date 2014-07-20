@@ -11,6 +11,7 @@ import javax.json.JsonException;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -34,7 +35,7 @@ public class SmackJobVerify extends SmackJob {
 
 	//Currently only supports a single source file, which must be passed in.
 	//TODO support multiple source files.  Do IFile resolution here, or in ExecutionTrace
-	protected ExecutionResult parseSmackOutput(IProject project, String output) {
+	protected ExecutionResult parseSmackOutput(IProject project, String output) throws ExecutionException {
 		
 		ExecutionResult er = new ExecutionResult();
 		
@@ -98,9 +99,11 @@ public class SmackJobVerify extends SmackJob {
 			
 		} catch (JsonException e) {
 			Logger log = Activator.getDefault().getLogger();
-			log.write(Logger.SMACKD_ERR, 
-					"SMACK did not return proper JSON output. Exception Message: " + e.getMessage());
-			return new ExecutionResult();
+			String msg = "SMACK did not return proper JSON output. Exception Message:\n\n" + e.getMessage();
+			msg += "\n\nSMACK Ouput:\n" + output;
+			log.write(Logger.SMACKD_ERR, msg);
+					
+			throw new ExecutionException(msg);
 		}			
 		return er;
 	}
