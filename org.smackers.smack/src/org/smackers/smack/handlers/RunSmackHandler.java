@@ -3,6 +3,8 @@ package org.smackers.smack.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -10,9 +12,10 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.core.resources.IFile;
-import org.smackers.smack.util.Controller;
+import org.smackers.smack.util.SmackJob;
+import org.smackers.smack.util.SmackJobReach;
+import org.smackers.smack.util.SmackJobVerify;
+import org.smackers.smack.util.SmackJobVerifyRemote;
 
 
 /**
@@ -44,7 +47,12 @@ public class RunSmackHandler extends AbstractHandler {
 				e1.printStackTrace();
 			}
 			try {
-				window.getActivePage().showView("org.smackers.smack.views.SmackMarkView");
+				if(eventCommandId.equals("org.smackers.smack.commands.runSmackVerifyCommand") ||
+						eventCommandId.equals("org.smackers.smack.commands.runRemoteSmackVerifyCommand")) {
+					window.getActivePage().showView("org.smackers.smack.views.SmackVerifyView");
+				} else {
+					window.getActivePage().showView("org.smackers.smack.views.SmackReachView");
+				}
 			} catch (PartInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -52,12 +60,19 @@ public class RunSmackHandler extends AbstractHandler {
 			
 			IFileEditorInput fileInput = (IFileEditorInput) input;
 			IFile file = fileInput.getFile();
-
-			if(eventCommandId.equals("org.smackers.smack.commands.runSmackCommand"))
-				Controller.smackVerifyLocal(file);
-			else if(eventCommandId.equals("org.smackers.smack.commands.runRemoteSmackCommand"))
-				Controller.smackVerifyRemote(file);
 			
+			SmackJob addJob;
+
+			if(eventCommandId.equals("org.smackers.smack.commands.runSmackVerifyCommand")) {
+				addJob = new SmackJobVerify(file);
+			} else if(eventCommandId.equals("org.smackers.smack.commands.runRemoteSmackVerifyCommand")) {
+				addJob = new SmackJobVerifyRemote(file);
+			} else {
+				addJob = new SmackJobReach(file);
+			}
+			addJob.setUser(true);
+			addJob.schedule();
+
 		} else {
 			MessageDialog.openInformation(
 					window.getShell(),

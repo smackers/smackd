@@ -24,7 +24,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.MONO_BIN, "/usr/bin");
 		store.setDefault(PreferenceConstants.DEBUG_MODE, true);
 		store.setDefault(PreferenceConstants.LOG_FILE, "/tmp/smackd_log.log");
-		store.setDefault(PreferenceConstants.SMACK_SERVER, "http://smack.utah.edu");
+		store.setDefault(PreferenceConstants.SMACK_SERVER, "http://155.98.68.146:8080");
 	}
 
 }
