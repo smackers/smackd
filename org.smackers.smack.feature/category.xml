@@ -3,5 +3,9 @@
    <feature url="features/org.smackers.smack.feature_2.0.0.jar" id="org.smackers.smack.feature" version="2.0.0">
       <category name="smackd"/>
    </feature>
-   <category-def name="smackd" label="SMACK&apos;D"/>
+   <category-def name="smackd" label="Smack&apos;d Verification Tools">
+      <description>
+         A suite of tools for verifying C/C++ programs.
+      </description>
+   </category-def>
 </site>

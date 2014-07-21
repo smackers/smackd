@@ -26,7 +26,7 @@ public class SmackPreferences
 	public SmackPreferences() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("SMACK'D Options");
+		setDescription("Smack'd Options");
 	}
 	
 	/**
