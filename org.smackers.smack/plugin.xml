@@ -5,7 +5,7 @@
    <extension
          point="org.eclipse.ui.commands">
       <category
-            name="SMACK"
+            name="SMACKd"
             id="org.smackers.smack.commands.smackCategory">
       </category>
       <command
@@ -214,18 +214,18 @@
             class="org.smackers.smack.views.SmackVerifyView"
             icon="icons/SmackdLogo16.png"
             id="org.smackers.smack.views.SmackVerifyView"
-            name="Smack&apos;d Verify">
+            name="SMACKd Verify">
       </view>
       <view
             category="org.smackers.smack.views.smackdCategory"
             class="org.smackers.smack.views.SmackReachView"
             icon="icons/SmackdLogo16.png"
             id="org.smackers.smack.views.SmackReachView"
-            name="Smack&apos;d Reach">
+            name="SMACKd Reach">
       </view>
       <category
             id="org.smackers.smack.views.smackdCategory"
-            name="Smack&apos;d">
+            name="SMACKd">
       </category>
                   <!-- icon="icons/sample.gif" Goes in "view" node of this extension node-->      
    </extension>
@@ -252,7 +252,7 @@
       <page
             class="org.smackers.smack.preferences.SmackPreferences"
             id="org.smackers.smack.preferences.SmackPreferences"
-            name="Smack&apos;d">
+            name="SMACKd">
       </page>
       <page
             category="org.smackers.smack.preferences.SmackPreferences"
@@ -281,7 +281,7 @@
             name="Call Order"/>
       <markerContentGenerator
             id="org.smackers.smack.markers.SmackdVerifyMarkerGenerator"
-            name="Smack&apos;d Verify Marker Generator">
+            name="SMACKd Verify Marker Generator">
          <markerTypeReference 
 		       id="org.smackers.smack.markers.smackAssertionFailedMarker"/>
          <markerTypeReference 
@@ -308,7 +308,7 @@
       </markerContentGenerator>
       <markerContentGenerator
             id="org.smackers.smack.markers.SmackdReachMarkerGenerator"
-            name="Smack&apos;d Reach Marker Generator">
+            name="SMACKd Reach Marker Generator">
          <markerTypeReference
                id="org.smackers.smack.markers.smackUnreachableMarker">
          </markerTypeReference>

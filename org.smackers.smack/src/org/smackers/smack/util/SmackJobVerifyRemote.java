@@ -35,12 +35,12 @@ import org.smackers.smack.preferences.PreferenceConstants;
 public class SmackJobVerifyRemote extends SmackJob {
 	
 	public SmackJobVerifyRemote(IFile file) {
-		super("Getting Smack'd Verify Remote", "Smack'd Verify Remote Failed!", SmackJob.markerTrace);
+		super("Getting SMACKd Verify Remote", "SMACKd Verify Remote Failed!", SmackJob.markerTrace);
 		setFile(file);
 		
 		setMarkerIdsToClear(Arrays.asList(SmackJob.markerFail, SmackJob.markerTrace));
 		
-		setSuccessTitle("Smack'd Verify Remote Success!");
+		setSuccessTitle("SMACKd Verify Remote Success!");
 		setSuccessMsg("Project verified successfully");
 	}
 
@@ -191,7 +191,7 @@ public class SmackJobVerifyRemote extends SmackJob {
 			final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 			MessageDialog.openInformation(
 					window.getShell(),
-					"Smack'd Verify Success!", 
+					"SMACKd Verify Success!", 
 					"Project verified successfully");
 		}
 	}
