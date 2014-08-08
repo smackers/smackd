@@ -1,6 +1,8 @@
 package org.smackers.smack;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.internal.ide.IDEInternalPreferences;
+import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.smackers.smack.util.Logger;
@@ -19,6 +21,8 @@ public class Activator extends AbstractUIPlugin {
 	// The logger
 	private Logger logger;
 	
+	private boolean oldMarkerLimitSetting;
+	
 	/**
 	 * The constructor
 	 */
@@ -33,6 +37,12 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		oldMarkerLimitSetting = IDEWorkbenchPlugin.getDefault().getPreferenceStore()
+				.getBoolean(IDEInternalPreferences.USE_MARKER_LIMITS);
+		if(oldMarkerLimitSetting) {
+			IDEWorkbenchPlugin.getDefault().getPreferenceStore().setValue(
+					IDEInternalPreferences.USE_MARKER_LIMITS, false);
+		}
 	}
 
 	/*
@@ -40,6 +50,10 @@ public class Activator extends AbstractUIPlugin {
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
+		if(oldMarkerLimitSetting) {
+			IDEWorkbenchPlugin.getDefault().getPreferenceStore().setValue(
+					IDEInternalPreferences.USE_MARKER_LIMITS, true);
+		}
 		plugin = null;
 		super.stop(context);
 	}
