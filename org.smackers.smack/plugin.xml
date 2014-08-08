@@ -352,14 +352,14 @@
          point="org.eclipse.ui.editors.annotationTypes">
       <type
             markerType="org.smackers.smack.markers.smackAssertionFailedMarker"
-            name="org.smackers.smack.markers.smackAssertionFailedMarker">
+            name="org.smackers.smack.markers.smackAssertionFailedAnnotation">
       </type>
    </extension>
    
    <extension
          point="org.eclipse.ui.editors.markerAnnotationSpecification">
       <specification
-            annotationType="org.smackers.smack.markers.smackAssertionFailedMarker"
+            annotationType="org.smackers.smack.markers.smackAssertionFailedAnnotation"
             colorPreferenceKey="org.smackers.smack.markers.smackAssertionFailedMarker.color"
             colorPreferenceValue="250,150,140"
             contributesToHeader="false"
@@ -391,14 +391,14 @@
          point="org.eclipse.ui.editors.annotationTypes">
       <type
             markerType="org.smackers.smack.markers.smackAssertionTraceMarker"
-            name="org.smackers.smack.markers.smackAssertionTraceMarker">
+            name="org.smackers.smack.markers.smackAssertionTraceAnnotation">
       </type>
    </extension>
    
    <extension
          point="org.eclipse.ui.editors.markerAnnotationSpecification">
       <specification
-            annotationType="org.smackers.smack.markers.smackAssertionTraceMarker"
+            annotationType="org.smackers.smack.markers.smackAssertionTraceAnnotation"
             colorPreferenceKey="org.smackers.smack.markers.smackAssertionTraceMarker.color"
             colorPreferenceValue="192,255,192"
             contributesToHeader="false"
@@ -431,13 +431,13 @@
          point="org.eclipse.ui.editors.annotationTypes">
       <type
             markerType="org.smackers.smack.markers.smackUnreachableMarker"
-            name="org.smackers.smack.markers.smackUnreachableMarker">
+            name="org.smackers.smack.markers.smackUnreachableAnnotation">
       </type>
    </extension>
    <extension
          point="org.eclipse.ui.editors.markerAnnotationSpecification">
       <specification
-            annotationType="org.smackers.smack.markers.smackUnreachableMarker"
+            annotationType="org.smackers.smack.markers.smackUnreachableAnnotation"
             colorPreferenceKey="org.smackers.smack.markers.smackUnreachableMarker.color"
             colorPreferenceValue="221,186,255"
             contributesToHeader="false"
