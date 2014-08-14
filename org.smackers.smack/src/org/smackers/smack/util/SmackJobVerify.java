@@ -20,7 +20,7 @@ import org.smackers.smack.Activator;
 public class SmackJobVerify extends SmackJob {
 	
 	public SmackJobVerify(IFile file) {
-		super("Getting Smack'd Verify", "Smack'd Verify Failed!", SmackJob.markerTrace);
+		super("Getting SMACKd Verify", "SMACKd Verify Failed!", SmackJob.markerTrace);
 		setFile(file);
 		
 		//Prepare process
@@ -28,7 +28,7 @@ public class SmackJobVerify extends SmackJob {
 		setArgs(Arrays.asList(	"--smackd",	"--verifier", "corral"));
 		
 		setMarkerIdsToClear(Arrays.asList(SmackJob.markerFail, SmackJob.markerTrace));
-		setSuccessTitle("Smack'd Verify Success!");
+		setSuccessTitle("SMACKd Verify Success!");
 		setSuccessMsg("Project verified successfully");
 		
 	}

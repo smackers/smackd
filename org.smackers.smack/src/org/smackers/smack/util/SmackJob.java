@@ -41,6 +41,8 @@ import org.smackers.smack.preferences.PreferenceConstants;
 
 public abstract class SmackJob extends Job {
 	
+	private IProgressMonitor monitor;
+	
 	//Marker types
 	protected static final String markerFail  = "org.smackers.smack.markers.smackAssertionFailedMarker";
 	protected static final String markerTrace = "org.smackers.smack.markers.smackAssertionTraceMarker";
@@ -99,6 +101,8 @@ public abstract class SmackJob extends Job {
 	
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
+		
+		this.monitor = monitor;
 		
 		final IProject project = file.getProject();
 		//Clear Verify markers
@@ -243,11 +247,17 @@ public abstract class SmackJob extends Job {
 			//If we don't wait till bri has output, the call to bri.read()
 			//  blocks, and deadlocks the threads.
 			while(!bri.ready()) {
+				if(monitor.isCanceled()) {
+					//monitor.
+					//p.
+					p.destroy();
+					throw new ExecutionException("Job cancelled");
+				}
 				Thread.sleep(100L);
 			}
 			
 			int c;
-			while ((c = bri.read()) != -1) {
+			while ((c = bri.read()) != -1 ) {
 				result.append((char)c);
 			}
 		} catch (IOException | InterruptedException e) {

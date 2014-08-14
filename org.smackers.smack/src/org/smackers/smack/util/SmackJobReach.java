@@ -21,7 +21,7 @@ import org.smackers.smack.Activator;
 public class SmackJobReach extends SmackJob {
 	
 	public SmackJobReach(IFile file) {
-		super("Getting Smack'd Reach", "Smack'd Reach Failed!", SmackJob.markerReach);
+		super("Getting SMACKd Reach", "SMACKd Reach Failed!", SmackJob.markerReach);
 		setFile(file);
 		
 		//Prepare process
@@ -31,7 +31,7 @@ public class SmackJobReach extends SmackJob {
 		
 		setMarkerIdsToClear(Arrays.asList(SmackJob.markerReach));
 		
-		setSuccessTitle("Smack'd Reach Success!");
+		setSuccessTitle("SMACKd Reach Success!");
 		setSuccessMsg("No unreachable code was detected");
 	}
 

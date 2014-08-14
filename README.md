@@ -1,4 +1,4 @@
-SMACK'D
+SMACKd
 ==============
 
 An Eclipse plugin for visually debugging SMACK.

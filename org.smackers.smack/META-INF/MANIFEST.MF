@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: SMACK'D
+Bundle-Name: SMACKd
 Bundle-SymbolicName: org.smackers.smack;singleton:=true
-Bundle-Version: 2.0.0
+Bundle-Version: 2.0.1
 Bundle-Activator: org.smackers.smack.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -13,7 +13,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.cdt,
  org.eclipse.core.filesystem;bundle-version="1.4.0",
  org.eclipse.cdt.ui,
- org.eclipse.ui.workbench
+ org.eclipse.ui.workbench,
+ org.eclipse.ui.editors
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,

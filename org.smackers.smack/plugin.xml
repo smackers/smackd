@@ -5,23 +5,23 @@
    <extension
          point="org.eclipse.ui.commands">
       <category
-            name="SMACK"
+            name="SMACKd"
             id="org.smackers.smack.commands.smackCategory">
       </category>
       <command
-            name="Get Smack&apos;d Verify"
+            name="Verify"
             categoryId="org.smackers.smack.commands.smackCategory"
             id="org.smackers.smack.commands.runSmackVerifyCommand">
       </command>
       <command
             categoryId="org.smackers.smack.commands.smackCategory"
             id="org.smackers.smack.commands.runRemoteSmackVerifyCommand"
-            name="Get Remote Smack&apos;d Verify">
+            name="Remote Verify">
       </command>
       <command
             categoryId="org.smackers.smack.commands.smackCategory"
             id="org.smackers.smack.commands.runSmackReachCommand"
-            name="Get Smack&apos;d Reach">
+            name="Reach">
       </command>
       <command
             categoryId="org.smackers.smack.commands.smackCategory"
@@ -90,7 +90,7 @@
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
          <menu
                id="org.smackers.smack.menus.smackMenu"
-               label="Smack&apos;d"
+               label="SMACKd"
                mnemonic="M">
             <command
                   commandId="org.smackers.smack.commands.runSmackVerifyCommand"
@@ -158,15 +158,13 @@
                commandId="org.smackers.smack.commands.runSmackVerifyCommand"
                icon="icons/SmackdLogo16.png"
                mnemonic="S"
-               style="push"
-               tooltip="Get Smack&apos;d Verify">
+               style="push">
          </command>
          <command
                commandId="org.smackers.smack.commands.runRemoteSmackVerifyCommand"
                icon="icons/SmackdLogo16.png"
                mnemonic="R"
-               style="push"
-               tooltip="Get Remote Smack&apos;d Verify">
+               style="push">
          </command>
          <separator
                name="org.smackers.smack.separator3"
@@ -175,8 +173,7 @@
          <command
                commandId="org.smackers.smack.commands.clearVerifyMarkersCommand"
                icon="icons/delete_obj.gif"
-               style="push"
-               tooltip="Clear Verify Markers">
+               style="push">
          </command>
       </menuContribution>
       <menuContribution
@@ -205,8 +202,7 @@
          <command
                commandId="org.smackers.smack.commands.clearReachMarkersCommand"
                icon="icons/delete_obj.gif"
-               style="push"
-               tooltip="Clear Reach Markers">
+               style="push">
          </command>
       </menuContribution>
    </extension>
@@ -218,18 +214,18 @@
             class="org.smackers.smack.views.SmackVerifyView"
             icon="icons/SmackdLogo16.png"
             id="org.smackers.smack.views.SmackVerifyView"
-            name="Smack&apos;d Verify">
+            name="SMACKd Verify">
       </view>
       <view
             category="org.smackers.smack.views.smackdCategory"
             class="org.smackers.smack.views.SmackReachView"
             icon="icons/SmackdLogo16.png"
             id="org.smackers.smack.views.SmackReachView"
-            name="Smack&apos;d Reach">
+            name="SMACKd Reach">
       </view>
       <category
             id="org.smackers.smack.views.smackdCategory"
-            name="Smack&apos;d">
+            name="SMACKd">
       </category>
                   <!-- icon="icons/sample.gif" Goes in "view" node of this extension node-->      
    </extension>
@@ -256,7 +252,7 @@
       <page
             class="org.smackers.smack.preferences.SmackPreferences"
             id="org.smackers.smack.preferences.SmackPreferences"
-            name="Smack&apos;d">
+            name="SMACKd">
       </page>
       <page
             category="org.smackers.smack.preferences.SmackPreferences"
@@ -285,7 +281,7 @@
             name="Call Order"/>
       <markerContentGenerator
             id="org.smackers.smack.markers.SmackdVerifyMarkerGenerator"
-            name="Smack&apos;d Verify Marker Generator">
+            name="SMACKd Verify Marker Generator">
          <markerTypeReference 
 		       id="org.smackers.smack.markers.smackAssertionFailedMarker"/>
          <markerTypeReference 
@@ -312,7 +308,7 @@
       </markerContentGenerator>
       <markerContentGenerator
             id="org.smackers.smack.markers.SmackdReachMarkerGenerator"
-            name="Smack&apos;d Reach Marker Generator">
+            name="SMACKd Reach Marker Generator">
          <markerTypeReference
                id="org.smackers.smack.markers.smackUnreachableMarker">
          </markerTypeReference>
@@ -356,14 +352,14 @@
          point="org.eclipse.ui.editors.annotationTypes">
       <type
             markerType="org.smackers.smack.markers.smackAssertionFailedMarker"
-            name="org.smackers.smack.markers.smackAssertionFailedMarker">
+            name="org.smackers.smack.markers.smackAssertionFailedAnnotation">
       </type>
    </extension>
    
    <extension
          point="org.eclipse.ui.editors.markerAnnotationSpecification">
       <specification
-            annotationType="org.smackers.smack.markers.smackAssertionFailedMarker"
+            annotationType="org.smackers.smack.markers.smackAssertionFailedAnnotation"
             colorPreferenceKey="org.smackers.smack.markers.smackAssertionFailedMarker.color"
             colorPreferenceValue="250,150,140"
             contributesToHeader="false"
@@ -395,14 +391,14 @@
          point="org.eclipse.ui.editors.annotationTypes">
       <type
             markerType="org.smackers.smack.markers.smackAssertionTraceMarker"
-            name="org.smackers.smack.markers.smackAssertionTraceMarker">
+            name="org.smackers.smack.markers.smackAssertionTraceAnnotation">
       </type>
    </extension>
    
    <extension
          point="org.eclipse.ui.editors.markerAnnotationSpecification">
       <specification
-            annotationType="org.smackers.smack.markers.smackAssertionTraceMarker"
+            annotationType="org.smackers.smack.markers.smackAssertionTraceAnnotation"
             colorPreferenceKey="org.smackers.smack.markers.smackAssertionTraceMarker.color"
             colorPreferenceValue="192,255,192"
             contributesToHeader="false"
@@ -435,13 +431,13 @@
          point="org.eclipse.ui.editors.annotationTypes">
       <type
             markerType="org.smackers.smack.markers.smackUnreachableMarker"
-            name="org.smackers.smack.markers.smackUnreachableMarker">
+            name="org.smackers.smack.markers.smackUnreachableAnnotation">
       </type>
    </extension>
    <extension
          point="org.eclipse.ui.editors.markerAnnotationSpecification">
       <specification
-            annotationType="org.smackers.smack.markers.smackUnreachableMarker"
+            annotationType="org.smackers.smack.markers.smackUnreachableAnnotation"
             colorPreferenceKey="org.smackers.smack.markers.smackUnreachableMarker.color"
             colorPreferenceValue="221,186,255"
             contributesToHeader="false"

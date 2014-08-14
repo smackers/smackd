@@ -16,7 +16,6 @@ public class ChangeMarkerViewHandler extends MarkerViewHandler {
 	}
 
 	
-	@SuppressWarnings({ "restriction"})
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		String eventCommandId = event.getCommand().getId();
 		SmackView sendingSmackView = (SmackView)getView(event);
