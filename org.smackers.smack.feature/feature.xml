@@ -2,7 +2,7 @@
 <feature
       id="org.smackers.smack.feature"
       label="SMACKd"
-      version="2.0.0"
+      version="2.0.1"
       provider-name="smackers">
 
    <description url="http://smackers.github.io/smackd">
@@ -47,6 +47,6 @@ THE SOFTWARE.
          id="org.smackers.smack"
          download-size="0"
          install-size="0"
-         version="2.0.0"/>
+         version="2.0.1"/>
 
 </feature>
